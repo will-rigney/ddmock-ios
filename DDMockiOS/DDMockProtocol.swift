@@ -1,5 +1,11 @@
 import Foundation
 
+enum EntrySetting {
+    case notFound
+    case mocked
+    case useRealAPI
+}
+
 public class DDMockProtocol: URLProtocol {
     
     public static func initialise(config: URLSessionConfiguration) {
@@ -12,10 +18,12 @@ public class DDMockProtocol: URLProtocol {
     }
     
     override public class func canInit(with request: URLRequest) -> Bool {
-        if let entry = DDMock.shared.getMockEntry(request: request) {
-            return !entry.useRealAPI() // Use mock if mock response exists and not set to use real API
+        switch DDMock.shared.hasMockEntry(request: request) {
+        case .mocked:
+            return true
+        case .notFound, .useRealAPI:
+            return false
         }
-        return false
     }
     
     override public class func canonicalRequest(for request: URLRequest) -> URLRequest {
