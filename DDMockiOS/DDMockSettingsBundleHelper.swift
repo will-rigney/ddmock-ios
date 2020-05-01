@@ -6,6 +6,7 @@ class DDMockSettingsBundleHelper {
     private static let endpoint = "_endpoint"
     private static let mockFile = "_mock_file"
     private static let useRealApi = "_use_real_api"
+    private static let globalUseRealApis = "use_real_apis"
     
     static func getSelectedMockFile(key: String) -> Int {
         return UserDefaults.standard.integer(forKey: getSettingsBundleKey(key: key) + mockFile)
@@ -32,6 +33,10 @@ class DDMockSettingsBundleHelper {
     static func useRealAPI(key: String) -> Bool {
         let userDefaultKey = getSettingsBundleKey(key: key) + useRealApi
         return UserDefaults.standard.object(forKey: userDefaultKey) as? Bool ?? false
+    }
+
+    static func globalUseRealAPIs() -> Bool {
+        return UserDefaults.standard.object(forKey: globalUseRealApis) as? Bool ?? false
     }
     
     private static func getSettingsBundleKey(key: String) -> String {

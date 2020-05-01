@@ -24,7 +24,8 @@ struct MockEntry: Codable {
     }
     
     func useRealAPI() -> Bool {
-        return DDMockSettingsBundleHelper.useRealAPI(key: path)
+        return DDMockSettingsBundleHelper.useRealAPI(key: path) ||
+            DDMockSettingsBundleHelper.globalUseRealAPIs()
     }
     
     func getResponseTime() -> Int {

@@ -56,15 +56,21 @@ public class DDMock {
     }
     
     private func getRegexEntry(path: String) -> MockEntry? {
+        var matches = [MockEntry]()
         for key in mockEntries.keys {
             if (key.contains("_")) {
-                let regex = key.replacingRegexMatches(pattern: "_.*_", replaceWith: ".*")
+                let regex = key.replacingRegexMatches(pattern: "_[^/]*_", replaceWith: "[^/]*")
                 if (path.matches(regex)) {
-                    return mockEntries[key]
+                    if let match = mockEntries[key] {
+                        matches.append(match)
+                    }
                 }
             }
         }
-        return nil
+        guard matches.count <= 1 else {
+            fatalError("Fatal Error: Multiple matches for regex entry.")
+        }
+        return matches.first
     }
     
     func getData(_ entry: MockEntry) -> Data? {
