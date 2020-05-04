@@ -48,10 +48,11 @@ public class DDMock {
         guard !isTest else {
             return entry
         }
-        // Auditing and accounting
+        // If strict mode is enabled, a missing entry is an error. Call handler.
         if strict && entry == nil {
             onMissingMock(path)
         }
+        // Here we log the entries so that clients (like a unit test) can verify a call was made.
         matchedPaths.append(path)
         return entry
     }
