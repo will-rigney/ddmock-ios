@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "DDMockiOS"
-  spec.version      = "0.1.0"
+  spec.version      = "0.1.5"
   spec.summary      = "Deloitte Digital simple network mocking library for iOS"
 
   # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |spec|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   # spec.description  = "Deloitte Digital simple network mocking library for iOS"
-  spec.homepage     = "https://hub.deloittedigital.com.au/stash/projects/DDMCD/repos/ddmockios/browse"
+  spec.homepage     = "https://github.com/DeloitteDigitalAPAC/ddmock-ios"
 
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -35,7 +35,7 @@ Pod::Spec.new do |spec|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  spec.license      = "ISC"
+  spec.license      = "MIT"
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -47,7 +47,7 @@ Pod::Spec.new do |spec|
   #  profile URL.
   #
 
-  spec.author               = "Deloitte Digital"
+  spec.author               = "Deloitte Digital Asia Pacific"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -63,7 +63,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "ssh://git@dvcs.deloittedigital.com.au:22/ddmcd/ddmockios.git", :tag => "0.1.0" }
+  spec.source       = { :git => "https://github.com/DeloitteDigitalAPAC/ddmock-ios.git", :tag => "v0.1.5" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
