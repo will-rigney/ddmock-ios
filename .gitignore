@@ -1,11 +1,8 @@
+# OS X
 .DS_Store
 
-## Build generated
-# build/
-DerivedData/
-output/
-
-## Various settings
+# Xcode
+build/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -15,32 +12,27 @@ output/
 *.perspectivev3
 !default.perspectivev3
 xcuserdata/
-
-## Other
-*.moved-aside
 *.xccheckout
-*.xcscmblueprint
-
-## Obj-C/Swift specific
+profile
+*.moved-aside
+DerivedData
 *.hmap
 *.ipa
-*.dSYM.zip
-*.dSYM
+output/
 
-## Playgrounds
-timeline.xctimeline
-playground.xcworkspace
+# Bundler
+.bundle
 
-## Swift Package Manager
-Packages/
-Package.pins
-Package.resolved
-.build/
+# Add this line if you want to avoid checking in source code from Carthage dependencies.
+# Carthage/Checkouts
 
-# Carthage
+Carthage/Build
+
+# We recommend against adding the Pods directory to your .gitignore. However
+# you should judge for yourself, the pros and cons are mentioned at:
+# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
+# 
+# Note: if you ignore the Pods directory, make sure to uncomment
+# `pod install` in .travis.yml
 #
-Carthage/Build/Mac
-Carthage/Build/tvOS
-Carthage/Build/watchOS
-*.swift.plist
-Carthage/
+Pods/
