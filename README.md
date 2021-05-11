@@ -9,22 +9,25 @@ An API mocking library for iOS.
 [![License](https://img.shields.io/cocoapods/l/DDMockiOS.svg?style=flat)](https://cocoapods.org/pods/DDMockiOS)
 [![Platform](https://img.shields.io/cocoapods/p/DDMockiOS.svg?style=flat)](https://cocoapods.org/pods/DDMockiOS)
 
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
 ## Requirements
 
 ## Installation
 
 ### CocoaPods
 
-DDMockiOS is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+DDMockiOS is available through [CocoaPods](https://cocoapods.org). 
+1. Add the following line to your Podfile:
 
 ```ruby
 pod 'DDMockiOS'
 ```
+2. Run `pod install`
+
+3. Create a new run script in the target build phase and add
+
+`python "${PODS_ROOT}/DDMockiOS/init-mocks.py" "<path_to_mock_files_directory>/mockfiles"`
+
+4. Follow Getting Started steps
 
 ### Building from scratch
 
@@ -32,19 +35,19 @@ pod 'DDMockiOS'
 
 2. Framework should be added in `output/DDMockiOS`
 
-3. Follow Getting Started steps
+3. Drag `output/DDMockiOS/` into project root folder
 
-## Getting started
-
-1. Drag `output/DDMockiOS/` into project root folder
-
-2. Create a new run script to target build phase and add
+4. Create a new run script in the target build phase and add
 
 `python "${SRCROOT}/DDMockiOS/init-mocks.py" "<path_to_mock_files_directory>/mockfiles"`
 
-3. Add `DDMock.shared.initialise()` to AppDelegate
+5. Follow Getting Started steps
 
-4. Add `DDMockProtocol.initialise(config: ...)` to networking library
+## Getting started
+
+1. Add `DDMock.shared.initialise()` to AppDelegate
+
+2. Add `DDMockProtocol.initialise(config: ...)` to networking library
 
 e.g. 
 
@@ -54,7 +57,7 @@ let configuration = URLSessionConfiguration.default
 DDMockProtocol.initialise(config: configuration)
 ```
 
-5. Check if after first run of the app, the `Settings.bundle` file underneath the `DDMockiOS/` is added to the project. If not add this to the project.
+3. Check if after first run of the app, the `Settings.bundle` file underneath the `DDMockiOS/` is added to the project. If not add this to the project.
 
 ## Mock API files
 
