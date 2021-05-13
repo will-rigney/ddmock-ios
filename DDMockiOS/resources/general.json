@@ -1,0 +1,56 @@
+{
+    "PreferenceSpecifiers": [
+        {
+            "Type": "PSToggleSwitchSpecifier",
+            "Title": "Stubbed Token Refresh Succeeds",
+            "Key": "stubbed_token_refresh_success",
+            "DefaultValue": true
+        },
+        {
+            "Type": "PSTextFieldSpecifier",
+            "Title": "Stubbed Token Refresh Delay (ms)",
+            "Key": "stubbed_token_refresh_delay",
+            "DefaultValue": 100
+        },
+        {
+            "Type": "PSGroupSpecifier",
+            "Title": "Launch Options"
+        },
+        {
+            "Type": "PSToggleSwitchSpecifier",
+            "Title": "Force Jailbroken",
+            "Key": "launch_options.force_jailbroken",
+            "DefaultValue": false
+        },
+        {
+            "Type": "PSToggleSwitchSpecifier",
+            "Title": "Force Upgrade",
+            "Key": "launch_options.force_upgrade",
+            "DefaultValue": false
+        },
+        {
+            "Type": "PSToggleSwitchSpecifier",
+            "Title": "Is Subsequent Login",
+            "Key": "isSubsequentLogin",
+            "DefaultValue": false
+        },
+        {
+            "Type": "PSMultiValueSpecifier",
+            "Title": "is_sqa_enabled",
+            "Key": "isSQAEnabled_debug",
+            "DefaultValue": "TRUE",
+            "Values": [
+                "TRUE",
+                "FALSE",
+                "ONE",
+                "TWO"
+            ],
+            "Titles": [
+                "TRUE (already set)",
+                "FALSE (must be set)",
+                "ONE (can skip once)",
+                "TWO (can skip twice)"
+            ]
+        }
+    ]
+}

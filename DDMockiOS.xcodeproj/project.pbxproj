@@ -14,6 +14,9 @@
 		9118D8C1223F1B4C00195DC1 /* DDMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BD223F1B4C00195DC1 /* DDMock.swift */; };
 		9118D8C2223F1B4C00195DC1 /* MockEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BE223F1B4C00195DC1 /* MockEntry.swift */; };
 		9118D8C3223F1B4C00195DC1 /* DDMockSettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BF223F1B4C00195DC1 /* DDMockSettingsBundleHelper.swift */; };
+		C9334FBD264D1AB500190EB7 /* general.json in Resources */ = {isa = PBXBuildFile; fileRef = C9334FBC264D1AB500190EB7 /* general.json */; };
+		C9334FC2264D1CB200190EB7 /* plist.py in Resources */ = {isa = PBXBuildFile; fileRef = C9334FC0264D1CB200190EB7 /* plist.py */; };
+		C9334FC3264D1CB200190EB7 /* swagger_to_plist.py in Resources */ = {isa = PBXBuildFile; fileRef = C9334FC1264D1CB200190EB7 /* swagger_to_plist.py */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +45,11 @@
 		9118D8BD223F1B4C00195DC1 /* DDMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDMock.swift; sourceTree = "<group>"; };
 		9118D8BE223F1B4C00195DC1 /* MockEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockEntry.swift; sourceTree = "<group>"; };
 		9118D8BF223F1B4C00195DC1 /* DDMockSettingsBundleHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDMockSettingsBundleHelper.swift; sourceTree = "<group>"; };
+		C9334FAE264CF8A800190EB7 /* ddmock.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ddmock.py; sourceTree = "<group>"; };
+		C9334FB3264CF90400190EB7 /* general.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = general.plist; sourceTree = "<group>"; };
+		C9334FBC264D1AB500190EB7 /* general.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = general.json; sourceTree = "<group>"; };
+		C9334FC0264D1CB200190EB7 /* plist.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = plist.py; sourceTree = "<group>"; };
+		C9334FC1264D1CB200190EB7 /* swagger_to_plist.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = swagger_to_plist.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,8 +128,45 @@
 				9118D8BE223F1B4C00195DC1 /* MockEntry.swift */,
 				9118D8B4223F1AE300195DC1 /* DDMockiOS.h */,
 				9118D8B5223F1AE300195DC1 /* Info.plist */,
+				C9334F98264CC11100190EB7 /* py */,
+				C9334FBF264D1C9200190EB7 /* resources */,
 			);
 			path = DDMockiOS;
+			sourceTree = "<group>";
+		};
+		C9334F98264CC11100190EB7 /* py */ = {
+			isa = PBXGroup;
+			children = (
+				C9334FAE264CF8A800190EB7 /* ddmock.py */,
+				C9334FAF264CF8A800190EB7 /* src */,
+				C9334FAD264CF8A800190EB7 /* tests */,
+			);
+			path = py;
+			sourceTree = "<group>";
+		};
+		C9334FAD264CF8A800190EB7 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = tests;
+			sourceTree = "<group>";
+		};
+		C9334FAF264CF8A800190EB7 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				C9334FC0264D1CB200190EB7 /* plist.py */,
+				C9334FC1264D1CB200190EB7 /* swagger_to_plist.py */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		C9334FBF264D1C9200190EB7 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				C9334FBC264D1AB500190EB7 /* general.json */,
+				C9334FB3264CF90400190EB7 /* general.plist */,
+			);
+			path = resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,6 +209,7 @@
 				9118D8AD223F1AE300195DC1 /* Sources */,
 				9118D8AE223F1AE300195DC1 /* Frameworks */,
 				9118D8AF223F1AE300195DC1 /* Resources */,
+				C9334F9D264CCBBA00190EB7 /* DDMOCK */,
 			);
 			buildRules = (
 			);
@@ -182,7 +228,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1240;
-				ORGANIZATIONNAME = "Bunduwongse, Natalie (AU - Sydney)";
+				ORGANIZATIONNAME = "Deloitte Digital";
 				TargetAttributes = {
 					52C27F7C2609C1A600D04B74 = {
 						CreatedOnToolsVersion = 12.4;
@@ -223,10 +269,34 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9334FBD264D1AB500190EB7 /* general.json in Resources */,
+				C9334FC3264D1CB200190EB7 /* swagger_to_plist.py in Resources */,
+				C9334FC2264D1CB200190EB7 /* plist.py in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C9334F9D264CCBBA00190EB7 /* DDMOCK */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = DDMOCK;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\npython3 ${SRCROOT}/DDMockiOS/py/ddmock.py IOOF/Resources/mockfiles\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		52C27F792609C1A600D04B74 /* Sources */ = {

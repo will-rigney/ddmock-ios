@@ -1,44 +1,68 @@
 import Foundation
 
-public class DDMock {
-    private let mockDirectory = "/mockfiles"
-    private let jsonExtension = "json"
-    
-    private var mockEntries = [String: MockEntry]()
+/*
+ DDMock
 
-    private(set) var strict: Bool  = false  // Enforces mocks only and no API fall-through
-    public private(set) var matchedPaths = [String]()  // chronological order of paths
+
+
+ */
+
+//
+public class DDMock {
+
+    // path under resources directory
+
+    private let mockDirectory = "/mockfiles"
+
+    private var mockEntries: [String: MockEntry] = [:]
+
+    // Enforces mocks only and no API fall-through
+    private(set) var strict: Bool = false
+
+    // chronological order of paths
+    public private(set) var matchedPaths: [String] = []
+
     public var onMissingMock: (_ path: String?) -> Void = {path in
         fatalError("missing stub for path: \(path ?? "<unknown>")")
     }
-    
+
+    // todo: no singletons in libraries
     public static let shared = DDMock()
 
+    // initialise DDMock library
+    // todo: kinda not great maybe
     public func initialise(strict: Bool = false) {
+
         self.strict = strict
         let docsPath = Bundle.main.resourcePath! + mockDirectory
         let fileManager = FileManager.default
-        
-        fileManager.enumerator(atPath: docsPath)?.forEach({ (e) in
-            if let e = e as? String, let url = URL(string: e) {
-                if (url.pathExtension == jsonExtension) {
+
+        fileManager
+            .enumerator(atPath: docsPath)?
+            .forEach{
+                if
+                    let e = $0 as? String,
+                    let url = URL(string: e),
+                    url.pathExtension == "json" {
+
                     createMockEntry(url: url)
                 }
             }
-        })
     }
-    
+
     public func clearHistory() {
         matchedPaths.removeAll()
     }
-    
+
     private func createMockEntry(url: URL) {
+
         let fileName = "/" + url.lastPathComponent
         let key = url.path.replacingOccurrences(of: fileName, with: "")
         if var entry = mockEntries[key] {
             entry.files.append(url.path)
             mockEntries[key] = entry
-        } else {
+        }
+        else {
             mockEntries[key] = MockEntry(path: key, files: [url.path])
         }
     }
@@ -72,8 +96,28 @@ public class DDMock {
         return getMockEntry(path: path, method: method, isTest: false)
     }
 
+    //
+    func mockPath(request: URLRequest) -> String? {
+        if let url = request.url,
+            let method = request.httpMethod {
+            return mockPath(path: url.path, method: method)
+        } else {
+            return nil
+        }
+    }
+
+    //
+    func mockPath(path: String, method: String) -> String? {
+        return path.replacingRegexMatches(
+            pattern: "^/",
+            replaceWith: "") + "/" + method.lowercased()
+    }
+
     private func getMockEntry(path: String, method: String, isTest: Bool) -> MockEntry? {
-        guard let path = mockPath(path: path, method: method) else { return nil}
+        guard
+            let path = mockPath(path: path, method: method) else {
+            return nil
+        }
         return mockEntry(for: path, isTest: isTest)
     }
 
@@ -81,7 +125,7 @@ public class DDMock {
         guard let path = request.url?.path, let method = request.httpMethod else { return .notFound }
         return hasMockEntry(path: path, method: method)
     }
-    
+
     func getMockEntry(request: URLRequest) -> MockEntry? {
         guard let path = request.url?.path, let method = request.httpMethod else { return nil }
         return getMockEntry(path: path, method: method, isTest: false)
@@ -104,7 +148,7 @@ public class DDMock {
         }
         return matches.first
     }
-    
+
     func getData(_ entry: MockEntry) -> Data? {
         var data: Data? = nil
         let f = entry.files[entry.getSelectedFile()]
@@ -118,35 +162,26 @@ public class DDMock {
     }
 }
 
+// todo: extension on string idk
 extension String {
+
     func matches(_ regex: String) -> Bool {
-        return self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
+        return range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
     }
-    
-    func replacingRegexMatches(pattern: String, replaceWith: String = "") -> String {
+
+    func replacingRegexMatches(
+        pattern: String,
+        replaceWith: String = "") -> String {
+
         var newString = ""
         do {
             let regex = try NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options.caseInsensitive)
             let range = NSMakeRange(0, self.count)
             newString = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: replaceWith)
-        } catch {
+        }
+        catch {
             debugPrint("Error \(error)")
         }
         return newString
-    }
-}
-
-extension DDMock {
-    func mockPath(request: URLRequest) -> String? {
-        if let url = request.url,
-            let method = request.httpMethod {
-            return mockPath(path: url.path, method: method)
-        } else {
-            return nil
-        }
-    }
-    
-    func mockPath(path: String, method: String) -> String? {
-        return path.replacingRegexMatches(pattern: "^/", replaceWith: "") + "/" + method.lowercased()
     }
 }
