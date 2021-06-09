@@ -106,6 +106,8 @@
 		9118D8A7223F1AE300195DC1 = {
 			isa = PBXGroup;
 			children = (
+				C9334FBF264D1C9200190EB7 /* Resources */,
+				C9334F98264CC11100190EB7 /* py */,
 				52C27F8B2609C1B600D04B74 /* Documentation */,
 				52C27F8A2609C1AE00D04B74 /* Pod */,
 				9118D8B3223F1AE300195DC1 /* DDMockiOS */,
@@ -135,8 +137,6 @@
 				9118D8B4223F1AE300195DC1 /* DDMockiOS.h */,
 				C9334FC7264E998D00190EB7 /* String+Regex.swift */,
 				9118D8B5223F1AE300195DC1 /* Info.plist */,
-				C9334F98264CC11100190EB7 /* py */,
-				C9334FBF264D1C9200190EB7 /* resources */,
 			);
 			path = DDMockiOS;
 			sourceTree = "<group>";
@@ -167,14 +167,14 @@
 			path = src;
 			sourceTree = "<group>";
 		};
-		C9334FBF264D1C9200190EB7 /* resources */ = {
+		C9334FBF264D1C9200190EB7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				C9334FDC265611E100190EB7 /* mockfiles */,
 				C9334FBC264D1AB500190EB7 /* general.json */,
 				C9334FB3264CF90400190EB7 /* general.plist */,
 			);
-			path = resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -301,7 +301,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\npython3 ${SRCROOT}/DDMockiOS/py/ddmock.py IOOF/Resources/mockfiles\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\npython3 ${SRCROOT}/py/ddmock.py Resources/mockfiles\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -2,7 +2,6 @@
 # Be sure to run `pod lib lint DDMockiOS.podspec' to ensure this is a
 # valid spec before submitting.
 #
-# Any lines starting with a # are optional, but their use is encouraged
 # To learn more about a Podspec see https://guides.cocoapods.org/syntax/podspec.html
 #
 
@@ -23,8 +22,9 @@ Pod::Spec.new do |spec|
   spec.source_files = 'DDMockiOS'
 
   spec.preserve_paths = [
-      'DDMockiOS/py/**',
-    ]
+    'py/ddmock.py',
+    'Resources/general.json'
+  ]
 
   spec.swift_version = '5'
   spec.static_framework = true

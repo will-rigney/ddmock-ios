@@ -44,12 +44,12 @@ def generate_map(mockfiles_path):
 
 
 def load_root_json():
-    with open("DDMockiOS/resources/root.json", "r") as root:
+    with open("Resources/root.json", "r") as root:
         return json.load(root)
 
 
 def load_endpoint_json():
-    with open("DDMockiOS/resources/root.json", "r") as root:
+    with open("Resources/root.json", "r") as root:
         return json.load(root)
 
 def main(mockfiles_path):
@@ -189,12 +189,12 @@ def main(mockfiles_path):
 
     # ** short circuit for testing
 
-    with open(settings_location + "Root.plist", "rb") as root: 
-        with open("DDMockiOS/resources/root.json", "w+") as output:
-            plist = plistlib.load(root)
-            json.dump(plist, output, indent=4)
-            print("dumped root json")
-    return
+#    with open(settings_location + "Root.plist", "rb") as root: 
+#        with open("resources/root.json", "w+") as output:
+#            plist = plistlib.load(root)
+#            json.dump(plist, output, indent=4)
+#            print("dumped root json")
+#    return
 
     # **
 
@@ -253,7 +253,7 @@ def main(mockfiles_path):
     # create general plist from json
     # this could be from 
     print("Creating general.plist...")
-    with open("DDMockiOS/resources/general.json", "r") as general:
+    with open("Resources/general.json", "r") as general:
         with open(os.path.join(settings_location, "general.plist"), "wb") as output:
             plistlib.dump(general.read(), output, fmt=plistlib.FMT_XML)
     # copy static file
