@@ -88,23 +88,4 @@ public final class DDMock {
     public func clearHistory() {
         matchedPaths.removeAll()
     }
-
-    // todo: this response should be configurable somehow like the header
-    // todo: hide this
-    // should know what the path is from the entry
-    func getData(_ entry: MockEntry) -> Data? {
-
-        let file = entry.getSelectedFile()
-
-        // get the path
-        // todo: isn't this encoded in the entry?
-        let path = Bundle.main.resourcePath! + mockDirectory
-
-        let url = URL(fileURLWithPath: "\(path)/\(file)")
-
-        return try? Data(
-            contentsOf: url,
-            options: .mappedIfSafe)
-
-    }
 }

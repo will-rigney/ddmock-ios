@@ -74,10 +74,9 @@ public class DDMockURLProtocolClass: URLProtocol {
             return
         }
 
-        // create mock response
-        // todo: check in what case could this be nil
-        // todo: also remove singleton
-        let data: Data? = DDMock.shared.getData(entry)
+        // get response data
+        // todo: check in what case could this be nil\\
+        let data: Data? = ResponseHelper.getData(entry)
 
         // header dictionary
         // todo: more configuration
@@ -96,35 +95,22 @@ public class DDMockURLProtocolClass: URLProtocol {
         }
 
         // simulate response time
-        // todo: use timer instead of sleep
         let time = TimeInterval(entry.getResponseTime() / 1000)
-        Thread.sleep(forTimeInterval: time)
 
-        // finally send the mock response to the client
-        let client = self.client!
-        sendMockResponse(client: client, response: response, data: data)
-    }
-
-    private func sendMockResponse(
-        client: URLProtocolClient,
-        response: HTTPURLResponse,
-        data: Data?) {
-
-        // send response
-        client.urlProtocol(
-            self,
-            didReceive: response,
-            cacheStoragePolicy: .notAllowed)
-
-        // send response data if available
-        if let data = data {
-            client.urlProtocol(
-                self,
-                didLoad: data)
-        }
-
-        // finish loading
-        client.urlProtocolDidFinishLoading(self)
+        // just use regular timer to async return the response
+        // async + await would be better
+        Timer.scheduledTimer(
+            withTimeInterval: time,
+            repeats: false,
+            block:
+                { timer in
+                    // finally send the mock response to the client
+                    ResponseHelper.sendMockResponse(
+                        urlProtocol: self,
+                        client: self.client!,
+                        response: response,
+                        data: data)
+                })
     }
 
 }

@@ -32,7 +32,7 @@ Pod::Spec.new do |spec|
   spec.source_files = 'DDMockiOS'
 
   spec.preserve_paths = [
-      'init-mocks.py',
+      'py/*',
     ]
 
   spec.swift_version = '5'
