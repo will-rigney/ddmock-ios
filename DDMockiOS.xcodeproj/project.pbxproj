@@ -54,6 +54,7 @@
 		C9815D95267060EF0056AC3E /* ResponseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseHelper.swift; sourceTree = "<group>"; };
 		C9815D9D2670635C0056AC3E /* MockRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRepository.swift; sourceTree = "<group>"; };
 		C9815E5F2670B7B00056AC3E /* root.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = root.json; sourceTree = "<group>"; };
+		C9B28EE62670D9CE007C31A9 /* endpoint.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = endpoint.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +148,7 @@
 			children = (
 				C9334FDC265611E100190EB7 /* mockfiles */,
 				C9334FBC264D1AB500190EB7 /* general.json */,
+				C9B28EE62670D9CE007C31A9 /* endpoint.json */,
 				C9815E5F2670B7B00056AC3E /* root.json */,
 				C9334FB3264CF90400190EB7 /* general.plist */,
 			);

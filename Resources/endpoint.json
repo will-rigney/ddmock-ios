@@ -1,0 +1,36 @@
+{
+    "PreferenceSpecifiers": [
+        {
+            "Type": "PSToggleSwitchSpecifier",
+            "Title": "Use real API",
+            "Key": "$endpointPathKey_use_real_api",
+            "DefaultValue": false
+        },
+        {
+            "DefaultValue": "$endpointPathName",
+            "Type": "PSTitleValueSpecifier",
+            "Title": "Endpoint",
+            "Key": "$endpointPathKey_endpoint"
+        },
+        {
+            "Type": "PSTextFieldSpecifier",
+            "DefaultValue": "400",
+            "Title": "Response Time (ms)",
+            "Key": "$endpointPathKey_response_time"
+        },
+        {
+            "Type": "PSTextFieldSpecifier",
+            "DefaultValue": "200",
+            "Title": "Status Code",
+            "Key": "$endpointPathKey_status_code"
+        },
+        {
+            "Type": "PSMultiValueSpecifier",
+            "Title": "Mock file",
+            "Key": "$endpointPathKey_mock_file",
+            "DefaultValue": 0,
+            "Values": [],
+            "Titles": []
+        }
+    ]
+}

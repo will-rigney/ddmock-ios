@@ -7,10 +7,12 @@ import json
 import argparse
 
 # create the map of endpoints from mockfiles
-def generate_map(mockfiles_path):
-    map = {}
 
-    ## walks all the mockfiles and for each creates just the leading path?
+
+def generate_map(mockfiles_path):
+    endpoint_map = {}
+
+    # walks all the mockfiles and for each creates just the leading path?
 
     # recursive directory traversal
     # todo: what is subdir
@@ -34,13 +36,13 @@ def generate_map(mockfiles_path):
                     endpointPath = endpointPath.replace("/", "", 1)
 
                 # map is accessed here (therefore make this a function duh)
-                if endpointPath in map:
-                    files = map[endpointPath]
+                if endpointPath in endpoint_map:
+                    files = endpoint_map[endpointPath]
                     files.append(file)
                 else:
-                    map[endpointPath] = [file]
+                    endpoint_map[endpointPath] = [file]
 
-    return map
+    return endpoint_map
 
 
 def load_root_json():
@@ -49,20 +51,17 @@ def load_root_json():
 
 
 def load_endpoint_json():
-    with open("Resources/root.json", "r") as root:
-        return json.load(root)
+    with open("Resources/endpoint.json", "r") as endpoint:
+        return json.load(endpoint)
+
 
 def main(mockfiles_path):
     print("wd: " + os.getcwd())
 
-    # todo: is this not passed straight to main
-    # path to mockfiles passed as argument
-    # e.g. IOOF/Resources/mockfiles
-
     # first create the map
     # this is where the directory traversal happens
     print("Creating map of endpoint paths and mock files...")
-    map = generate_map(mockfiles_path)
+    endpoint_map = generate_map(mockfiles_path)
 
     # start creating settings bundle
     # todo: what is the settings bundle & where are we creating it?
@@ -73,8 +72,7 @@ def main(mockfiles_path):
     # todo: dynamic / configuration
     # is this from cwd or root of project?
     # todo: this should come from arguments
-    settings_location = "DDMockiOS/Settings.bundle/"
-
+    settings_location = "Settings.bundle/"
 
     # Settings.bundle is really just a directory
     # first create directory if it doesn't exist
@@ -85,124 +83,94 @@ def main(mockfiles_path):
     print("Creating root plist...")
     root = load_root_json()
 
-    # Root plist file
-    # root = '<?xml version="1.0" encoding="UTF-8"?>'
-    # root = root + '\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">'
-    # root = root + '\n<plist version="1.0">'
-    # root = root + "\n<dict>"
-    # root = root + "\n\t<key>StringsTable</key>"
-    # root = root + "\n\t<string>Root</string>"
-    # root = root + "\n\t<key>PreferenceSpecifiers</key>"
-    # root = root + "\n\t<array>"
-    # root = root + "\n\t\t<dict>"
-    # root = root + "\n\t\t\t<key>Type</key>"
-    # root = root + "\n\t\t\t\t<string>PSToggleSwitchSpecifier</string>"
-    # root = root + "\n\t\t\t\t<key>Title</key>"
-    # root = root + "\n\t\t\t\t<string>Use real APIs</string>"
-    # root = root + "\n\t\t\t\t<key>Key</key>"
-    # root = root + "\n\t\t\t\t<string>use_real_apis</string>"
-    # root = root + "\n\t\t\t\t<key>DefaultValue</key>"
-    # root = root + "\n\t\t\t\t<true/>"
-    # root = root + "\n\t\t</dict>"
-    # root = root + "\n\t\t<dict>"
-    # root = root + "\n\t\t\t<key>Type</key>"
-    # root = root + "\n\t\t\t<string>PSChildPaneSpecifier</string>"
-    # root = root + "\n\t\t\t<key>File</key>"
-    # root = root + "\n\t\t\t<string>general</string>"
-    # root = root + "\n\t\t\t<key>Title</key>"
-    # root = root + "\n\t\t\t<string>General</string>"
-    # root = root + "\n\t\t</dict>"
-    # root = root + "\n\t\t<dict>"
-    # root = root + "\n\t\t\t<key>Type</key>"
-    # root = root + "\n\t\t\t<string>PSGroupSpecifier</string>"
-    # root = root + "\n\t\t\t<key>Title</key>"
-    # root = root + "\n\t\t\t<string>MOCK</string>"
-    # root = root + "\n\t\t</dict>"
+    print("Creating endpoint plist...")
+    endpoint = load_endpoint_json()
 
-    # Endpoints plist file
-    plist = '<?xml version="1.0" encoding="UTF-8"?>'
-    plist = plist + '\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">'
-    plist = plist + '\n<plist version="1.0">'
-    plist = plist + "\n<dict>"
-    plist = plist + "\n\t<key>PreferenceSpecifiers</key>"
-    plist = plist + "\n\t<array>"
-    plist = plist + "\n\t\t<dict>"
-    plist = plist + "\n\t\t\t<key>Type</key>"
-    plist = plist + "\n\t\t\t<string>PSToggleSwitchSpecifier</string>"
-    plist = plist + "\n\t\t\t<key>Title</key>"
-    plist = plist + "\n\t\t\t<string>Use real API</string>"
-    plist = plist + "\n\t\t\t<key>Key</key>"
-    plist = plist + "\n\t\t\t<string>$endpointPathKey_use_real_api</string>" # $endpointPathKey
-    plist = plist + "\n\t\t\t<key>DefaultValue</key>"
-    plist = plist + "\n\t\t\t<false/>"
-    plist = plist + "\n\t\t</dict>"
-    plist = plist + "\n\t\t<dict>"
-    plist = plist + "\n\t\t\t<key>DefaultValue</key>"
-    plist = plist + "\n\t\t\t<string>$endpointPathName</string>"
-    plist = plist + "\n\t\t\t<key>Type</key>"
-    plist = plist + "\n\t\t\t<string>PSTitleValueSpecifier</string>"
-    plist = plist + "\n\t\t\t<key>Title</key>"
-    plist = plist + "\n\t\t\t<string>Endpoint</string>"
-    plist = plist + "\n\t\t\t<key>Key</key>"
-    plist = plist + "\n\t\t\t<string>$endpointPathKey_endpoint</string>" # $endpointPathKey
-    plist = plist + "\n\t\t</dict>"
-    plist = plist + "\n\t\t<dict>"
-    plist = plist + "\n\t\t\t<key>Type</key>"
-    plist = plist + "\n\t\t\t<string>PSTextFieldSpecifier</string>"
-    plist = plist + "\n\t\t\t<key>DefaultValue</key>"
-    plist = plist + "\n\t\t\t<string>400</string>"
-    plist = plist + "\n\t\t\t<key>Title</key>"
-    plist = plist + "\n\t\t\t<string>Response Time (ms)</string>"
-    plist = plist + "\n\t\t\t<key>Key</key>"
-    plist = plist + "\n\t\t\t<string>$endpointPathKey_response_time</string>" # $endpointPathKey
-    plist = plist + "\n\t\t</dict>"
-    plist = plist + "\n\t\t<dict>"
-    plist = plist + "\n\t\t\t<key>Type</key>"
-    plist = plist + "\n\t\t\t<string>PSTextFieldSpecifier</string>"
-    plist = plist + "\n\t\t\t<key>DefaultValue</key>"
-    plist = plist + "\n\t\t\t<string>200</string>"
-    plist = plist + "\n\t\t\t<key>Title</key>"
-    plist = plist + "\n\t\t\t<string>Status Code</string>"
-    plist = plist + "\n\t\t\t<key>Key</key>"
-    plist = plist + "\n\t\t\t<string>$endpointPathKey_status_code</string>" # $endpointPathKey
-    plist = plist + "\n\t\t</dict>"
-    plist = plist + "\n\t\t<dict>"
-    plist = plist + "\n\t\t\t<key>Type</key>"
-    plist = plist + "\n\t\t\t<string>PSMultiValueSpecifier</string>"
-    plist = plist + "\n\t\t\t<key>Title</key>"
-    plist = plist + "\n\t\t\t<string>Mock file</string>"
-    plist = plist + "\n\t\t\t<key>Key</key>"
-    plist = plist + "\n\t\t\t<string>$endpointPathKey_mock_file</string>" # $endpointPathKey
-    plist = plist + "\n\t\t\t<key>DefaultValue</key>"
-    plist = plist + "\n\t\t\t<real>0</real>"
-    plist = plist + "\n\t\t\t<key>Values</key>"
-    plist = plist + "\n\t\t\t<array>"
-    plist = plist + "\n\t\t\t\t$indexMockFiles"  # $indexMockFiles
-    plist = plist + "\n\t\t\t</array>"
-    plist = plist + "\n\t\t\t<key>Titles</key>"
-    plist = plist + "\n\t\t\t<array>"
-    plist = plist + "\n\t\t\t\t$mockFiles"
-    plist = plist + "\n\t\t\t</array>"
-    plist = plist + "\n\t\t</dict>"
-    plist = plist + "\n\t</array>"
-    plist = plist + "\n</dict>"
-    plist = plist + "\n</plist>"
+    # # Endpoints plist file
+    # plist = '<?xml version="1.0" encoding="UTF-8"?>'
+    # plist = plist + '\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">'
+    # plist = plist + '\n<plist version="1.0">'
+    # plist = plist + "\n<dict>"
+    # plist = plist + "\n\t<key>PreferenceSpecifiers</key>"
+    # plist = plist + "\n\t<array>"
+    # plist = plist + "\n\t\t<dict>"
+    # plist = plist + "\n\t\t\t<key>Type</key>"
+    # plist = plist + "\n\t\t\t<string>PSToggleSwitchSpecifier</string>"
+    # plist = plist + "\n\t\t\t<key>Title</key>"
+    # plist = plist + "\n\t\t\t<string>Use real API</string>"
+    # plist = plist + "\n\t\t\t<key>Key</key>"
+    # plist = plist + "\n\t\t\t<string>$endpointPathKey_use_real_api</string>" # $endpointPathKey
+    # plist = plist + "\n\t\t\t<key>DefaultValue</key>"
+    # plist = plist + "\n\t\t\t<false/>"
+    # plist = plist + "\n\t\t</dict>"
+    # plist = plist + "\n\t\t<dict>"
+    # plist = plist + "\n\t\t\t<key>DefaultValue</key>"
+    # plist = plist + "\n\t\t\t<string>$endpointPathName</string>"
+    # plist = plist + "\n\t\t\t<key>Type</key>"
+    # plist = plist + "\n\t\t\t<string>PSTitleValueSpecifier</string>"
+    # plist = plist + "\n\t\t\t<key>Title</key>"
+    # plist = plist + "\n\t\t\t<string>Endpoint</string>"
+    # plist = plist + "\n\t\t\t<key>Key</key>"
+    # plist = plist + "\n\t\t\t<string>$endpointPathKey_endpoint</string>" # $endpointPathKey
+    # plist = plist + "\n\t\t</dict>"
+    # plist = plist + "\n\t\t<dict>"
+    # plist = plist + "\n\t\t\t<key>Type</key>"
+    # plist = plist + "\n\t\t\t<string>PSTextFieldSpecifier</string>"
+    # plist = plist + "\n\t\t\t<key>DefaultValue</key>"
+    # plist = plist + "\n\t\t\t<string>400</string>"
+    # plist = plist + "\n\t\t\t<key>Title</key>"
+    # plist = plist + "\n\t\t\t<string>Response Time (ms)</string>"
+    # plist = plist + "\n\t\t\t<key>Key</key>"
+    # plist = plist + "\n\t\t\t<string>$endpointPathKey_response_time</string>" # $endpointPathKey
+    # plist = plist + "\n\t\t</dict>"
+    # plist = plist + "\n\t\t<dict>"
+    # plist = plist + "\n\t\t\t<key>Type</key>"
+    # plist = plist + "\n\t\t\t<string>PSTextFieldSpecifier</string>"
+    # plist = plist + "\n\t\t\t<key>DefaultValue</key>"
+    # plist = plist + "\n\t\t\t<string>200</string>"
+    # plist = plist + "\n\t\t\t<key>Title</key>"
+    # plist = plist + "\n\t\t\t<string>Status Code</string>"
+    # plist = plist + "\n\t\t\t<key>Key</key>"
+    # plist = plist + "\n\t\t\t<string>$endpointPathKey_status_code</string>" # $endpointPathKey
+    # plist = plist + "\n\t\t</dict>"
+    # plist = plist + "\n\t\t<dict>"
+    # plist = plist + "\n\t\t\t<key>Type</key>"
+    # plist = plist + "\n\t\t\t<string>PSMultiValueSpecifier</string>"
+    # plist = plist + "\n\t\t\t<key>Title</key>"
+    # plist = plist + "\n\t\t\t<string>Mock file</string>"
+    # plist = plist + "\n\t\t\t<key>Key</key>"
+    # plist = plist + "\n\t\t\t<string>$endpointPathKey_mock_file</string>" # $endpointPathKey
+    # plist = plist + "\n\t\t\t<key>DefaultValue</key>"
+    # plist = plist + "\n\t\t\t<real>0</real>"
+    # plist = plist + "\n\t\t\t<key>Values</key>"
+    # plist = plist + "\n\t\t\t<array>"
+    # plist = plist + "\n\t\t\t\t$indexMockFiles"  # $indexMockFiles
+    # plist = plist + "\n\t\t\t</array>"
+    # plist = plist + "\n\t\t\t<key>Titles</key>"
+    # plist = plist + "\n\t\t\t<array>"
+    # plist = plist + "\n\t\t\t\t$mockFiles"       # $mockFiles
+    # plist = plist + "\n\t\t\t</array>"
+    # plist = plist + "\n\t\t</dict>"
+    # plist = plist + "\n\t</array>"
+    # plist = plist + "\n</dict>"
+    # plist = plist + "\n</plist>"
 
     # ** short circuit for testing
 
-#    with open(settings_location + "Root.plist", "rb") as root: 
-#        with open("resources/root.json", "w+") as output:
-#            plist = plistlib.load(root)
-#            json.dump(plist, output, indent=4)
-#            print("dumped root json")
-#    return
+#    with open(settings_location + "Root.plist", "rb") as root:
+    # with open("resources/endpoint.json", "w+") as output:
+    #     plist_bytes = plist.encode(encoding='utf-8')
+    #     plist = plistlib.loads(plist_bytes, fmt=plistlib.FMT_XML)
+    #     json.dump(plist, output, indent=4)
+    #     print("dumped root json")
+
+    # return
 
     # **
-
     # for path & files in map
-    for endpointPath, files in map.items():
+    for endpointPath, files in endpoint_map.items():
 
-        # replaces the slashes with periods for 
+        # replaces the slashes with periods for
         filename = endpointPath.replace("/", ".")
 
         print(root)
@@ -215,7 +183,6 @@ def main(mockfiles_path):
 
         root['PreferenceSpecifiers'].append(new_item)
 
-
         # create a copy of the endpoint plist replacing
         # the $endpointPathName key     -> endpointPath
         # the $indexMockFiles key       -> indexes
@@ -225,15 +192,26 @@ def main(mockfiles_path):
         # creating plist file for endpoint
         print("Creating plist file for " + endpointPath + "...")
 
+        def replaceKeys(item, path, filename):
+            # todo: clarify what is happening
+            item['DefaultValue'] = item['key'].replace(
+                "$endpointPathName", path)
+            item['Key'] = item['key'].replace("$endpointPathKey", filename)
+
+
         # todo: endpoints added to plist here
-        with open(settings_location + filename + ".plist", "w+") as fout:
-            newplist = plist
+        with open(settings_location + filename + ".plist", "wb") as fout:
+            new_endpoint = endpoint
+
+            map(lambda item: replaceKeys, new_endpoint["PreferenceSpecifiers"])
 
             # newplist = newplist.replace("$endpointPathName", endpointPath).replace(
             #     "$endpointPathKey", filename)
 
             # indexes = "<integer>0</integer>"
-            # for i in range(1, len(files)):
+            for setting in filter(lambda item: item['Title'] == "Mock file", new_endpoint['PreferenceSpecifiers']):
+                setting["Values"] = list(range(0, len(files)))
+                setting["Titles"] = files
             #     indexes = indexes + "\n\t\t\t\t<integer>" + \
             #         str(i) + "</integer>"
             # newplist = newplist.replace("$indexMockFiles", indexes)
@@ -244,15 +222,15 @@ def main(mockfiles_path):
             #         files[i] + "</string>"
             # newplist = newplist.replace("$mockFiles", mockFiles)
 
-            fout.write(newplist)
+            plistlib.dump(new_endpoint, fout, fmt=plistlib.FMT_XML)
+            # fout.write(new_endpoint)
 
     # insert: mb generate general plist? even from some config?
 
     # general_plist_path = "DDMockiOS/DDMockiOS/general.plist"
 
-
     # create general plist from json
-    # this could be from 
+    # this could be from
     print("Creating general.plist...")
     with open("Resources/general.json", "r") as general:
         with open(os.path.join(settings_location, "general.plist"), "wb") as output:
@@ -263,7 +241,7 @@ def main(mockfiles_path):
     # copies the "general.plist"
     # todo: generate from the lib
     # shutil.copyfile(general_plist_path,
-                    # os.path.join(settings_location, "general.plist"))
+            # os.path.join(settings_location, "general.plist"))
 
     # copies from one static path to another (pointlessly?)
 
@@ -284,8 +262,10 @@ def main(mockfiles_path):
 if __name__ == "__main__":
 
     # parse arguments
-    parser = argparse.ArgumentParser(description='Generate Settings.bundle for DDMockiOS')
-    parser.add_argument('mockfiles_path', nargs='?', default="DDMockiOS/resources/mockfiles")
+    parser = argparse.ArgumentParser(
+        description='Generate Settings.bundle for DDMockiOS')
+    parser.add_argument('mockfiles_path', nargs='?',
+                        default="DDMockiOS/resources/mockfiles")
 
     args = parser.parse_args()
 
