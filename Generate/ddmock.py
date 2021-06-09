@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 import plistlib
+import pathlib
 import logging
 import json
 import argparse
@@ -16,7 +17,6 @@ def generate_map(mockfiles_path):
 
     # recursive directory traversal
     # todo: what is subdir
-    # damn dynamic types
     for subdir, dirs, files in os.walk(mockfiles_path):
         print(subdir)
 
@@ -36,6 +36,8 @@ def generate_map(mockfiles_path):
                     endpointPath = endpointPath.replace("/", "", 1)
 
                 # map is accessed here (therefore make this a function duh)
+                # this does the same thing as swift code to run it
+                # "get or insert"
                 if endpointPath in endpoint_map:
                     files = endpoint_map[endpointPath]
                     files.append(file)
@@ -45,18 +47,20 @@ def generate_map(mockfiles_path):
     return endpoint_map
 
 
-def load_root_json():
-    with open("Resources/root.json", "r") as root:
-        return json.load(root)
-
-
-def load_endpoint_json():
-    with open("Resources/endpoint.json", "r") as endpoint:
-        return json.load(endpoint)
+def load_json(path):
+    with open(path, "r") as file:
+        return json.load(file)
 
 
 def main(mockfiles_path):
-    print("wd: " + os.getcwd())
+    cwd = os.getcwd()
+    print(f"wd: {cwd}")
+
+    # get resource path from canonical path of script
+    path = os.path.dirname(os.path.realpath(__file__))
+    path = pathlib.Path(path)
+    path = path.parent.joinpath("Resources").absolute()
+    print(f"path: {path}")
 
     # first create the map
     # this is where the directory traversal happens
@@ -79,81 +83,14 @@ def main(mockfiles_path):
     if not os.path.exists(settings_location):
         os.makedirs(settings_location)
 
-    # create root plist
-    print("Creating root plist...")
-    root = load_root_json()
+    # load templates
+    print("Loading JSON templates...")
 
-    print("Creating endpoint plist...")
-    endpoint = load_endpoint_json()
+    root = path.joinpath("root.json")
+    root = load_json(root)
 
-    # # Endpoints plist file
-    # plist = '<?xml version="1.0" encoding="UTF-8"?>'
-    # plist = plist + '\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">'
-    # plist = plist + '\n<plist version="1.0">'
-    # plist = plist + "\n<dict>"
-    # plist = plist + "\n\t<key>PreferenceSpecifiers</key>"
-    # plist = plist + "\n\t<array>"
-    # plist = plist + "\n\t\t<dict>"
-    # plist = plist + "\n\t\t\t<key>Type</key>"
-    # plist = plist + "\n\t\t\t<string>PSToggleSwitchSpecifier</string>"
-    # plist = plist + "\n\t\t\t<key>Title</key>"
-    # plist = plist + "\n\t\t\t<string>Use real API</string>"
-    # plist = plist + "\n\t\t\t<key>Key</key>"
-    # plist = plist + "\n\t\t\t<string>$endpointPathKey_use_real_api</string>" # $endpointPathKey
-    # plist = plist + "\n\t\t\t<key>DefaultValue</key>"
-    # plist = plist + "\n\t\t\t<false/>"
-    # plist = plist + "\n\t\t</dict>"
-    # plist = plist + "\n\t\t<dict>"
-    # plist = plist + "\n\t\t\t<key>DefaultValue</key>"
-    # plist = plist + "\n\t\t\t<string>$endpointPathName</string>"
-    # plist = plist + "\n\t\t\t<key>Type</key>"
-    # plist = plist + "\n\t\t\t<string>PSTitleValueSpecifier</string>"
-    # plist = plist + "\n\t\t\t<key>Title</key>"
-    # plist = plist + "\n\t\t\t<string>Endpoint</string>"
-    # plist = plist + "\n\t\t\t<key>Key</key>"
-    # plist = plist + "\n\t\t\t<string>$endpointPathKey_endpoint</string>" # $endpointPathKey
-    # plist = plist + "\n\t\t</dict>"
-    # plist = plist + "\n\t\t<dict>"
-    # plist = plist + "\n\t\t\t<key>Type</key>"
-    # plist = plist + "\n\t\t\t<string>PSTextFieldSpecifier</string>"
-    # plist = plist + "\n\t\t\t<key>DefaultValue</key>"
-    # plist = plist + "\n\t\t\t<string>400</string>"
-    # plist = plist + "\n\t\t\t<key>Title</key>"
-    # plist = plist + "\n\t\t\t<string>Response Time (ms)</string>"
-    # plist = plist + "\n\t\t\t<key>Key</key>"
-    # plist = plist + "\n\t\t\t<string>$endpointPathKey_response_time</string>" # $endpointPathKey
-    # plist = plist + "\n\t\t</dict>"
-    # plist = plist + "\n\t\t<dict>"
-    # plist = plist + "\n\t\t\t<key>Type</key>"
-    # plist = plist + "\n\t\t\t<string>PSTextFieldSpecifier</string>"
-    # plist = plist + "\n\t\t\t<key>DefaultValue</key>"
-    # plist = plist + "\n\t\t\t<string>200</string>"
-    # plist = plist + "\n\t\t\t<key>Title</key>"
-    # plist = plist + "\n\t\t\t<string>Status Code</string>"
-    # plist = plist + "\n\t\t\t<key>Key</key>"
-    # plist = plist + "\n\t\t\t<string>$endpointPathKey_status_code</string>" # $endpointPathKey
-    # plist = plist + "\n\t\t</dict>"
-    # plist = plist + "\n\t\t<dict>"
-    # plist = plist + "\n\t\t\t<key>Type</key>"
-    # plist = plist + "\n\t\t\t<string>PSMultiValueSpecifier</string>"
-    # plist = plist + "\n\t\t\t<key>Title</key>"
-    # plist = plist + "\n\t\t\t<string>Mock file</string>"
-    # plist = plist + "\n\t\t\t<key>Key</key>"
-    # plist = plist + "\n\t\t\t<string>$endpointPathKey_mock_file</string>" # $endpointPathKey
-    # plist = plist + "\n\t\t\t<key>DefaultValue</key>"
-    # plist = plist + "\n\t\t\t<real>0</real>"
-    # plist = plist + "\n\t\t\t<key>Values</key>"
-    # plist = plist + "\n\t\t\t<array>"
-    # plist = plist + "\n\t\t\t\t$indexMockFiles"  # $indexMockFiles
-    # plist = plist + "\n\t\t\t</array>"
-    # plist = plist + "\n\t\t\t<key>Titles</key>"
-    # plist = plist + "\n\t\t\t<array>"
-    # plist = plist + "\n\t\t\t\t$mockFiles"       # $mockFiles
-    # plist = plist + "\n\t\t\t</array>"
-    # plist = plist + "\n\t\t</dict>"
-    # plist = plist + "\n\t</array>"
-    # plist = plist + "\n</dict>"
-    # plist = plist + "\n</plist>"
+    endpoint = path.joinpath("endpoint.json")
+    endpoint = load_json(endpoint)
 
     # ** short circuit for testing
 
@@ -168,10 +105,11 @@ def main(mockfiles_path):
 
     # **
     # for path & files in map
-    for endpointPath, files in endpoint_map.items():
+    for endpoint_path, files in endpoint_map.items():
 
+        print(f"Creating endpoint plist for {endpoint_path}...")
         # replaces the slashes with periods for
-        filename = endpointPath.replace("/", ".")
+        filename = endpoint_path.replace("/", ".")
 
         print(root)
 
@@ -190,14 +128,13 @@ def main(mockfiles_path):
         # then write the new file at settings_location + filename + .plist
 
         # creating plist file for endpoint
-        print("Creating plist file for " + endpointPath + "...")
+        print("Creating plist file for " + endpoint_path + "...")
 
         def replaceKeys(item, path, filename):
             # todo: clarify what is happening
             item['DefaultValue'] = item['key'].replace(
                 "$endpointPathName", path)
             item['Key'] = item['key'].replace("$endpointPathKey", filename)
-
 
         # todo: endpoints added to plist here
         with open(settings_location + filename + ".plist", "wb") as fout:
@@ -232,16 +169,17 @@ def main(mockfiles_path):
     # create general plist from json
     # this could be from
     print("Creating general.plist...")
-    with open("Resources/general.json", "r") as general:
-        with open(os.path.join(settings_location, "general.plist"), "wb") as output:
-            plistlib.dump(general.read(), output, fmt=plistlib.FMT_XML)
+    general = path.joinpath("general.json")
+    general = load_json(general)
+    with open(os.path.join(settings_location, "general.plist"), "wb") as output:
+        plistlib.dump(general, output, fmt=plistlib.FMT_XML)
     # copy static file
     # failing here because it's not from cwd or a variable
     # todo: some var for location
     # copies the "general.plist"
     # todo: generate from the lib
     # shutil.copyfile(general_plist_path,
-            # os.path.join(settings_location, "general.plist"))
+        # os.path.join(settings_location, "general.plist"))
 
     # copies from one static path to another (pointlessly?)
 
