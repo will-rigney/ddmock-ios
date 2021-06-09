@@ -1,26 +1,55 @@
 import Foundation
 
-// maybe protocol?
+/**
+ Internal storage wrapper for mock entries.
+ To reinitialise a list of mocks, just create a new MockRepository
+ and drop the old one.
+ */
 internal class MockRepository {
 
-    /// map
-    private var mockEntries: [String: MockEntry] = [:]
+    /// map storage of mock entries
+    private let mockEntries: [String: MockEntry]
 
-    // should be a "get or insert" function in the map
-    func createMockEntry(url: URL) {
+    /**
+     iterate through files & populate the mocks
+     */
+    init(path: String, fm: FileManager) {
+        var entries: [String: MockEntry] = [:]
 
-        // todo: check this matching
-        let fileName = "/" + url.lastPathComponent
-        let key = url.path.replacingOccurrences(of: fileName, with: "")
+        // load mock files
+        fm
+            .enumerator(atPath: path)?
+            .forEach {
 
-        // todo: separate the assignment
-        if var entry = mockEntries[key] {
-            entry.files.append(url.path)
-            mockEntries[key] = entry
-        }
-        else {
-            mockEntries[key] = MockEntry(path: key, files: [url.path])
-        }
+                guard
+                    let path = $0 as? String,
+                    let url = URL(string: path) else {
+
+                    return
+                }
+                guard
+                    // todo: new file schema
+                    url.pathExtension == "json" else {
+
+                return
+            }
+
+                // get the key
+                // todo: check absolute string is sane key
+                let key = url.deletingLastPathComponent().absoluteString
+
+                // put into the dictionary
+                if var entry = entries[key] {
+                   // add the mock to the existing file list for this entry
+                    entry.files.append(url.path)
+                }
+                else {
+                    // create a new entry
+                    entries[key] = MockEntry(path: key, files: [url.path])
+                }
+            }
+
+        self.mockEntries = entries
     }
 
     /// todo: doc
@@ -41,7 +70,7 @@ internal class MockRepository {
     }
 
     /**
-     get the mock entry, respecting strict mode, "isTest"
+     get the mock entry, respecting strict mode
      */
     internal func getEntry(
         path: String,
@@ -57,18 +86,23 @@ internal class MockRepository {
         if strict && entry == nil {
             onMissing(path)
         }
-        // Here we log the entries so that clients (like a unit test) can verify a call was made.
-        // todo: this is guarded by isTest flag so doesn't apply to tests
-        // todo: remove istest flag
 
         return entry
     }
+
+    /*
+     todo: consolidate mock entry types, add regex to mock entry itself
+     If regex entries were included in the same ds
+     hasMockEntry would look much simpler
+     and would not require retreiving the item
+     */
 
     /**
      this returns an entry simply by path
      need to include the method to get it in a way that makes sense
      */
     private func getMockEntry(path: String, method: String) -> MockEntry? {
+        // method string is always lowercased
         let fullPath = path.replacingRegexMatches(
             pattern: "^/",
             replaceWith: "") + "/" + method.lowercased()
@@ -77,7 +111,6 @@ internal class MockRepository {
         return mockEntries[fullPath] ?? getRegexEntry(path: fullPath)
     }
 
-
     // todo: simplify this a little
 
     private func getRegexEntry(path: String) -> MockEntry? {
@@ -85,7 +118,9 @@ internal class MockRepository {
         var matches: [MockEntry] = []
 
         // iterate through mock entry keys (what are these)
-        //
+        // these are the path without the filename, including method
+        // whatever we're looking for should be in the value
+        // to keep this lookup O(1)
         for key in mockEntries.keys {
 
             // if key contains _
@@ -106,9 +141,18 @@ internal class MockRepository {
                 }
             }
         }
+        // maximum of 1 match or panic
         guard matches.count <= 1 else {
             fatalError("Fatal Error: Multiple matches for regex entry.")
         }
+        // return first or none
         return matches.first
     }
+
+    /**
+     Create a mock entry for the given url and returns it.
+     If a mock entry exists for this path it returns a new entry with the
+     new path added.
+     // todo: can we do this all at once?
+     */
 }

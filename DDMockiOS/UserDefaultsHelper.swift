@@ -21,7 +21,7 @@ class UserDefaultsHelper {
     }
 }
 
-// replaces / with . for some reason
+// replaces / with . for some undocumented reason
 private func getSettingsBundleKey(key: String) -> String {
     return key.replacingOccurrences(of: "/", with: ".")
 }

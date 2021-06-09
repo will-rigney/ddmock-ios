@@ -35,7 +35,7 @@ public final class DDMock {
     public static let shared = DDMock()
 
     /// repository for storing mocks
-    private let repository = MockRepository()
+    private var repository: MockRepository!
 
     /**
      Initialise DDMock library
@@ -43,40 +43,26 @@ public final class DDMock {
      by the client before DDMock can be used.
      */
     public func initialise(strict: Bool = false) {
-       // todo: kinda not great maybe
+       // todo: more consistent configuration
         self.strict = strict
 
         // todo: resource path
         let path = Bundle.main.resourcePath! + mockDirectory
 
-        // parse the files in the mock directory
-        readMockFiles(path: path, fm: FileManager.default)
+        // load the files in the mock directory
+        repository = MockRepository(path: path, fm: FileManager.default)
     }
 
     /**
-     iterate through files & populate the mocks
-     todo: move out the "create mock entry" call
+     Check if an entry exists for a given path
      */
-    private func readMockFiles(path: String, fm: FileManager) {
-        fm
-            .enumerator(atPath: path)?
-            .forEach {
-                if
-                    let e = $0 as? String,
-                    let url = URL(string: e),
-                    url.pathExtension == "json" {
-
-                    // does it open the file? no
-                    // url is actually the path of the file (very strange)
-                    repository.createMockEntry(url: url)
-                }
-            }
-    }
-
     func hasEntry(path: String, method: String) -> Bool {
         return repository.hasEntry(path: path, method: method)
     }
 
+    /**
+     Return the entry for a given path, if one exists
+     */
     func getEntry(path: String, method: String) -> MockEntry? {
         // get the entry
         guard
@@ -96,25 +82,29 @@ public final class DDMock {
         return entry
     }
 
-    /// reset the history
+    /**
+     reset the history
+     */
     public func clearHistory() {
         matchedPaths.removeAll()
     }
 
     // todo: this response should be configurable somehow like the header
     // todo: hide this
+    // should know what the path is from the entry
     func getData(_ entry: MockEntry) -> Data? {
 
-        var data: Data? = nil
-        let f = entry.files[entry.getSelectedFile()]
+        let file = entry.getSelectedFile()
 
-        let docsPath = Bundle.main.resourcePath! + mockDirectory
-        let url = URL(fileURLWithPath: "\(docsPath)/\(f)")
+        // get the path
+        // todo: isn't this encoded in the entry?
+        let path = Bundle.main.resourcePath! + mockDirectory
 
-        data = try? Data(
+        let url = URL(fileURLWithPath: "\(path)/\(file)")
+
+        return try? Data(
             contentsOf: url,
             options: .mappedIfSafe)
 
-        return data
     }
 }

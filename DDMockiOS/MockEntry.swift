@@ -4,29 +4,35 @@ import Foundation
  mock entry struct
  */
 struct MockEntry: Codable {
-    // internal? why not private
+    // constants
     private static let defaultResponseTime = 400
     private static let defaultStatusCode = 200
 
     // ok
     let path: String
 
+    // todo: less mutability
     var files: [String] = []
+
+    // todo: more thread safety
     var selectedFile = 0
 
     //
     private var statusCode = defaultStatusCode
+
+    //
     var responseTime = defaultResponseTime
 
+    ///
     init(path: String, files: [String]) {
         self.path = path
         self.files = files
     }
 
-    // this is where all the "settings bundle helper" is used
-    // why is this an int?
-    func getSelectedFile() -> Int {
-        return UserDefaultsHelper.getInteger(key: path, item: .mockFile)
+    // this is the index of the selected file in the files list for an entry
+    func getSelectedFile() -> String {
+        let index = UserDefaultsHelper.getInteger(key: path, item: .mockFile)
+        return files[index]
     }
 
     // get status code for an entry
