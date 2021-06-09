@@ -1,8 +1,35 @@
 import Foundation
 
+//struct MockResponse {
+//    let headers: [String: String]
+//    // other elements a response might have
+//    fileprivate init(
+//        headers: [String: String]) {
+//
+//        self.headers = headers
+//    }
+//}
+//
+//fileprivate class MockResponseBuilder {
+//    private var headers: [String: String] = [:]
+//
+//    func addHeaders(contentLength: Int?) {
+//        self.headers = ResponseHelper.getMockHeaders(contentLength: contentLength)
+//    }
+//
+//    func build() -> MockResponse {
+//        return MockResponse(headers: headers)
+//    }
+//}
+/*
+ basically we want to have some response type, and we want to both create it
+ and send it
+ 
+ */
+
 // todo: maybe think about replacing this with a builder
 // todo: move this out of amorphous 'helper'
-internal struct ResponseHelper {
+class ResponseHelper {
 
     // todo: allow headers to be configurable
     static func getMockHeaders(contentLength: Int?) -> [String: String] {
@@ -44,7 +71,6 @@ internal struct ResponseHelper {
         return try? Data(
             contentsOf: url,
             options: .mappedIfSafe)
-
     }
 
     ///

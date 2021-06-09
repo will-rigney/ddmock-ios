@@ -53,7 +53,7 @@ internal class MockRepository {
     }
 
     /// todo: doc
-    internal func hasEntry(path: String, method: String) -> Bool {
+    func hasEntry(path: String, method: String) -> Bool {
 
         // idk what the idea of this map function useRealAPI
 
@@ -72,7 +72,7 @@ internal class MockRepository {
     /**
      get the mock entry, respecting strict mode
      */
-    internal func getEntry(
+    func getEntry(
         path: String,
         method: String,
         strict: Bool,

@@ -15,14 +15,14 @@ Pod::Spec.new do |spec|
   spec.homepage         = 'https://github.com/DeloitteDigitalAPAC/ddmock-ios'
   spec.license          = { :type => 'MIT', :file => 'LICENSE' }
   spec.author           = 'Deloitte Digital Asia Pacific'
-  spec.source           = { :git => "https://github.com/DeloitteDigitalAPAC/ddmock-ios.git", :tag => 'v' + spec.version.to_s }
+  spec.source           = { :git => "https://github.com/will-rigney/ddmock-ios.git", :tag => 'v' + spec.version.to_s }
 
   spec.ios.deployment_target = '11.0'
 
   spec.source_files = 'DDMockiOS'
 
   spec.preserve_paths = [
-    'py/ddmock.py',
+    'Generate/ddmock.py',
     'Resources/general.json',
     'Resources/root.json'
   ]

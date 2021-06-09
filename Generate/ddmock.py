@@ -53,6 +53,7 @@ def load_endpoint_json():
         return json.load(root)
 
 def main(mockfiles_path):
+    print("wd: " + os.getcwd())
 
     # todo: is this not passed straight to main
     # path to mockfiles passed as argument
