@@ -10,7 +10,7 @@ Pod::Spec.new do |spec|
   spec.version          = '2.0'
   spec.summary          = 'Deloitte Digital simple network mocking library for iOS'
 
-  spec.description      = 'Deloitte Digital simple network mocking library for iOS'
+  spec.description      = 'Deloitte Digital simple network mocking library for iOS. Runtime configurable mocking library with highly flexible usage. Integrated tooling for delivery and testing teams.'
 
   spec.homepage         = 'https://github.com/DeloitteDigitalAPAC/ddmock-ios'
   spec.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -19,7 +19,7 @@ Pod::Spec.new do |spec|
 
   spec.ios.deployment_target = '11.0'
 
-  spec.source_files = 'DDMockiOS'
+  spec.source_files = 'Sources'
 
   spec.preserve_paths = [
     'Generate/ddmock.py',
