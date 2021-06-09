@@ -23,7 +23,8 @@ Pod::Spec.new do |spec|
 
   spec.preserve_paths = [
     'py/ddmock.py',
-    'Resources/general.json'
+    'Resources/general.json',
+    'Resources/root.json'
   ]
 
   spec.swift_version = '5'
