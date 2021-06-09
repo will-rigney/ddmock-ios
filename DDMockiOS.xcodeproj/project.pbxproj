@@ -15,8 +15,6 @@
 		9118D8C2223F1B4C00195DC1 /* MockEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BE223F1B4C00195DC1 /* MockEntry.swift */; };
 		9118D8C3223F1B4C00195DC1 /* UserDefaultsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BF223F1B4C00195DC1 /* UserDefaultsHelper.swift */; };
 		C9334FBD264D1AB500190EB7 /* general.json in Resources */ = {isa = PBXBuildFile; fileRef = C9334FBC264D1AB500190EB7 /* general.json */; };
-		C9334FC2264D1CB200190EB7 /* plist.py in Resources */ = {isa = PBXBuildFile; fileRef = C9334FC0264D1CB200190EB7 /* plist.py */; };
-		C9334FC3264D1CB200190EB7 /* swagger_to_plist.py in Resources */ = {isa = PBXBuildFile; fileRef = C9334FC1264D1CB200190EB7 /* swagger_to_plist.py */; };
 		C9334FC8264E998D00190EB7 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9334FC7264E998D00190EB7 /* String+Regex.swift */; };
 		C9334FDD265611E100190EB7 /* mockfiles in Resources */ = {isa = PBXBuildFile; fileRef = C9334FDC265611E100190EB7 /* mockfiles */; };
 		C9815D96267060EF0056AC3E /* ResponseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9815D95267060EF0056AC3E /* ResponseHelper.swift */; };
@@ -280,9 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9334FBD264D1AB500190EB7 /* general.json in Resources */,
-				C9334FC3264D1CB200190EB7 /* swagger_to_plist.py in Resources */,
 				C9334FDD265611E100190EB7 /* mockfiles in Resources */,
-				C9334FC2264D1CB200190EB7 /* plist.py in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
