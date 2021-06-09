@@ -1,45 +1,64 @@
 import Foundation
 
-/*
- DDMock
-
+/**
+ This is the main DDMock entry point.
 
 
  */
+public final class DDMock {
 
-//
-public class DDMock {
-
-    // path under resources directory
-
+    /// path under resources directory
     private let mockDirectory = "/mockfiles"
 
+    /// map
     private var mockEntries: [String: MockEntry] = [:]
 
-    // Enforces mocks only and no API fall-through
-    private(set) var strict: Bool = false
+    /// enforces mocks only and no API fall-through
+    internal var strict: Bool = false
 
-    // chronological order of paths
-    public private(set) var matchedPaths: [String] = []
+    // todo: this should be thread safe
+    // and have a max size
+    /// chronological order of paths
+    private(set) var matchedPaths: [String] = []
 
-    public var onMissingMock: (_ path: String?) -> Void = {path in
+    /// needed for singleton
+    private init() {}
+
+    /**
+     Assignable handler when a mock is not present in strict mode.
+     By default this is a panic!
+     */
+    public var onMissingMock: (_ path: String?) -> Void = { path in
         fatalError("missing stub for path: \(path ?? "<unknown>")")
     }
 
-    // todo: no singletons in libraries
+    // todo: remove the singleton if possible, require a single instance
+    /// Singleton instance of DDMock
     public static let shared = DDMock()
 
-    // initialise DDMock library
-    // todo: kinda not great maybe
+    /**
+     Initialise DDMock library
+     This must be called on the DDMock.shared singleton
+     by the client before DDMock can be used.
+     */
     public func initialise(strict: Bool = false) {
+       // todo: kinda not great maybe
+       // this is called by the client on the singleton? archaic
 
         self.strict = strict
-        let docsPath = Bundle.main.resourcePath! + mockDirectory
-        let fileManager = FileManager.default
 
-        fileManager
-            .enumerator(atPath: docsPath)?
-            .forEach{
+        // todo: resource path
+        let path = Bundle.main.resourcePath! + mockDirectory
+
+        // parse the files in the mock directory
+        readMockFiles(path: path, fm: FileManager.default)
+
+    }
+
+    private func readMockFiles(path: String, fm: FileManager) {
+        fm
+            .enumerator(atPath: path)?
+            .forEach {
                 if
                     let e = $0 as? String,
                     let url = URL(string: e),
@@ -50,6 +69,7 @@ public class DDMock {
             }
     }
 
+    /// reset the history
     public func clearHistory() {
         matchedPaths.removeAll()
     }
@@ -58,6 +78,7 @@ public class DDMock {
 
         let fileName = "/" + url.lastPathComponent
         let key = url.path.replacingOccurrences(of: fileName, with: "")
+        // separate the assignment
         if var entry = mockEntries[key] {
             entry.files.append(url.path)
             mockEntries[key] = entry
@@ -67,7 +88,10 @@ public class DDMock {
         }
     }
 
-    private func mockEntry(for path: String, isTest: Bool) -> MockEntry? {
+    /**
+     get the mock entry
+     */
+    private func getMockEntry(path: String, isTest: Bool) -> MockEntry? {
         let entry = mockEntries[path] ?? getRegexEntry(path: path)
         guard !isTest else {
             return entry
@@ -77,12 +101,21 @@ public class DDMock {
             onMissingMock(path)
         }
         // Here we log the entries so that clients (like a unit test) can verify a call was made.
+        // todo: this is guarded by isTest flag so doesn't apply to tests
+        // todo: remove istest flag
         matchedPaths.append(path)
         return entry
     }
 
-    func hasMockEntry(path: String, method: String) -> EntrySetting {
-        switch getMockEntry(path: path, method: method, isTest: true)?.useRealAPI() {
+    ///
+    func getMockEntryByPath(path: String, method: String) -> MockEntry? {
+        return getMockEntryInternal(path: path, method: method, isTest: false)
+    }
+
+
+    // todo: what is the point of EntrySetting
+    func hasMockEntryByPath(path: String, method: String) -> EntrySetting {
+        switch getMockEntryInternal(path: path, method: method, isTest: true)?.useRealAPI() {
         case .none:
             return .notFound
         case .some(false):
@@ -92,51 +125,30 @@ public class DDMock {
         }
     }
 
-    func getMockEntry(path: String, method: String) -> MockEntry? {
-        return getMockEntry(path: path, method: method, isTest: false)
-    }
-
-    //
-    func mockPath(request: URLRequest) -> String? {
-        if let url = request.url,
-            let method = request.httpMethod {
-            return mockPath(path: url.path, method: method)
-        } else {
+    // called by the two above functions
+    private func getMockEntryInternal(path: String, method: String, isTest: Bool) -> MockEntry? {
+        guard
+            let path = getMockPath(path: path, method: method) else {
             return nil
         }
+        return getMockEntry(path: path, isTest: isTest)
     }
 
+
     //
-    func mockPath(path: String, method: String) -> String? {
+    private func getMockPath(path: String, method: String) -> String? {
         return path.replacingRegexMatches(
             pattern: "^/",
             replaceWith: "") + "/" + method.lowercased()
     }
 
-    private func getMockEntry(path: String, method: String, isTest: Bool) -> MockEntry? {
-        guard
-            let path = mockPath(path: path, method: method) else {
-            return nil
-        }
-        return mockEntry(for: path, isTest: isTest)
-    }
-
-    func hasMockEntry(request: URLRequest) -> EntrySetting {
-        guard let path = request.url?.path, let method = request.httpMethod else { return .notFound }
-        return hasMockEntry(path: path, method: method)
-    }
-
-    func getMockEntry(request: URLRequest) -> MockEntry? {
-        guard let path = request.url?.path, let method = request.httpMethod else { return nil }
-        return getMockEntry(path: path, method: method, isTest: false)
-    }
 
     private func getRegexEntry(path: String) -> MockEntry? {
         var matches = [MockEntry]()
         for key in mockEntries.keys {
             if (key.contains("_")) {
                 let regex = key.replacingRegexMatches(pattern: "_[^/]*_", replaceWith: "[^/]*")
-                if (path.matches(regex)) {
+                if path.matches(regex) {
                     if let match = mockEntries[key] {
                         matches.append(match)
                     }
@@ -159,29 +171,5 @@ public class DDMock {
             data = nil
         }
         return data
-    }
-}
-
-// todo: extension on string idk
-extension String {
-
-    func matches(_ regex: String) -> Bool {
-        return range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
-    }
-
-    func replacingRegexMatches(
-        pattern: String,
-        replaceWith: String = "") -> String {
-
-        var newString = ""
-        do {
-            let regex = try NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options.caseInsensitive)
-            let range = NSMakeRange(0, self.count)
-            newString = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: replaceWith)
-        }
-        catch {
-            debugPrint("Error \(error)")
-        }
-        return newString
     }
 }

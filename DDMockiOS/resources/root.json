@@ -1,0 +1,20 @@
+{
+    "PreferenceSpecifiers": [
+        {
+            "DefaultValue": true,
+            "Key": "use_real_apis",
+            "Title": "Use real APIs",
+            "Type": "PSToggleSwitchSpecifier"
+        },
+        {
+            "File": "general",
+            "Title": "General",
+            "Type": "PSChildPaneSpecifier"
+        },
+        {
+            "Title": "MOCK",
+            "Type": "PSGroupSpecifier"
+        }
+    ],
+    "StringsTable": "Root"
+}
