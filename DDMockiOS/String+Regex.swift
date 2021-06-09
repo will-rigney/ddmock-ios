@@ -2,6 +2,9 @@
 // todo: extension on string idk
 extension String {
 
+    /**
+     gets matches & checks they are not equal to nil
+     */
     func matches(_ regex: String) -> Bool {
         let matches = range(
             of: regex,
@@ -11,6 +14,10 @@ extension String {
         return matches != nil
     }
 
+    /**
+     Replace regex matches
+     replaceWith is the template (withTemplate)
+     */
     func replacingRegexMatches(
         pattern: String,
         replaceWith: String = "") -> String {

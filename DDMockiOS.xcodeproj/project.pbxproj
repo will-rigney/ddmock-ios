@@ -20,6 +20,7 @@
 		C9334FC8264E998D00190EB7 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9334FC7264E998D00190EB7 /* String+Regex.swift */; };
 		C9334FDD265611E100190EB7 /* mockfiles in Resources */ = {isa = PBXBuildFile; fileRef = C9334FDC265611E100190EB7 /* mockfiles */; };
 		C9815D96267060EF0056AC3E /* ResponseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9815D95267060EF0056AC3E /* ResponseHelper.swift */; };
+		C9815D9E2670635C0056AC3E /* MockRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9815D9D2670635C0056AC3E /* MockRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		C9334FC7264E998D00190EB7 /* String+Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Regex.swift"; sourceTree = "<group>"; };
 		C9334FDC265611E100190EB7 /* mockfiles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = mockfiles; sourceTree = "<group>"; };
 		C9815D95267060EF0056AC3E /* ResponseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseHelper.swift; sourceTree = "<group>"; };
+		C9815D9D2670635C0056AC3E /* MockRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 			children = (
 				9118D8BD223F1B4C00195DC1 /* DDMock.swift */,
 				9118D8BC223F1B4C00195DC1 /* DDMockURLProtocolClass.swift */,
+				C9815D9D2670635C0056AC3E /* MockRepository.swift */,
 				C9815D95267060EF0056AC3E /* ResponseHelper.swift */,
 				9118D8BF223F1B4C00195DC1 /* UserDefaultsHelper.swift */,
 				9118D8BE223F1B4C00195DC1 /* MockEntry.swift */,
@@ -320,6 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9118D8C3223F1B4C00195DC1 /* UserDefaultsHelper.swift in Sources */,
+				C9815D9E2670635C0056AC3E /* MockRepository.swift in Sources */,
 				C9334FC8264E998D00190EB7 /* String+Regex.swift in Sources */,
 				9118D8C0223F1B4C00195DC1 /* DDMockURLProtocolClass.swift in Sources */,
 				9118D8C1223F1B4C00195DC1 /* DDMock.swift in Sources */,

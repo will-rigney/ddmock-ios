@@ -1,5 +1,8 @@
 import Foundation
 
+/**
+ mock entry struct
+ */
 struct MockEntry: Codable {
     // internal? why not private
     private static let defaultResponseTime = 400
@@ -14,7 +17,6 @@ struct MockEntry: Codable {
     //
     private var statusCode = defaultStatusCode
     var responseTime = defaultResponseTime
-
 
     init(path: String, files: [String]) {
         self.path = path

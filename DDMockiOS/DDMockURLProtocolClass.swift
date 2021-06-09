@@ -35,7 +35,7 @@ public class DDMockURLProtocolClass: URLProtocol {
         // this canInit is the only place that calls hasMockEntry
         // this actually retreives the mock as part of its execution
         // todo: caching
-        return DDMock.shared.hasMockEntryByPath(path: path, method: method)
+        return DDMock.shared.hasEntry(path: path, method: method)
     }
 
     /**
@@ -67,7 +67,7 @@ public class DDMockURLProtocolClass: URLProtocol {
         // within the public interface boundary or make it more explicit
 
         // todo: remove singleton
-        guard let entry = DDMock.shared.getMockEntryByPath(
+        guard let entry = DDMock.shared.getEntry(
             path: path,
             method: method) else {
 
