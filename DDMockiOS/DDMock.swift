@@ -82,7 +82,9 @@ public final class DDMock {
         guard
             let entry = repository.getEntry(
                 path: path,
-                method: method) else {
+                method: method,
+                strict: strict,
+                onMissing: onMissingMock) else {
 
             return nil
         }

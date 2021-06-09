@@ -24,14 +24,14 @@ internal class MockRepository {
     }
 
     /// todo: doc
-    func hasEntry(path: String, method: String) -> Bool {
+    internal func hasEntry(path: String, method: String) -> Bool {
 
         // idk what the idea of this map function useRealAPI
 
         // get the entry
         // todo: cache
         guard
-            let entry = getEntry(path: path, method: method) else {
+            let entry = getMockEntry(path: path, method: method) else {
 
             return false
         }
@@ -41,25 +41,16 @@ internal class MockRepository {
     }
 
     /**
-     this returns an entry simply by path
-     need to include the method to get it in a way that makes sense
-     */
-    func getEntry(path: String, method: String) -> MockEntry? {
-        let fullPath = path.replacingRegexMatches(
-            pattern: "^/",
-            replaceWith: "") + "/" + method.lowercased()
-
-        // return an entry for either a non-wildcard or wildcard path
-        return mockEntries[fullPath] ?? getRegexEntry(path: fullPath)
-    }
-
-    /**
      get the mock entry, respecting strict mode, "isTest"
      */
-    private func getMockEntry(path: String, strict: Bool, onMissing: (_ path: String?) -> Void) -> MockEntry? {
+    internal func getEntry(
+        path: String,
+        method: String,
+        strict: Bool,
+        onMissing: (_ path: String?) -> Void) -> MockEntry? {
 
         // get the entry
-        let entry = getEntry(path: path, method: "") // todo
+        let entry = getMockEntry(path: path, method: "") // todo
 
         // If strict mode is enabled, a missing entry is an error. Call handler.
         // this will still fall through
@@ -73,6 +64,20 @@ internal class MockRepository {
         return entry
     }
 
+    /**
+     this returns an entry simply by path
+     need to include the method to get it in a way that makes sense
+     */
+    private func getMockEntry(path: String, method: String) -> MockEntry? {
+        let fullPath = path.replacingRegexMatches(
+            pattern: "^/",
+            replaceWith: "") + "/" + method.lowercased()
+
+        // return an entry for either a non-wildcard or wildcard path
+        return mockEntries[fullPath] ?? getRegexEntry(path: fullPath)
+    }
+
+
     // todo: simplify this a little
 
     private func getRegexEntry(path: String) -> MockEntry? {
@@ -80,6 +85,7 @@ internal class MockRepository {
         var matches: [MockEntry] = []
 
         // iterate through mock entry keys (what are these)
+        //
         for key in mockEntries.keys {
 
             // if key contains _
