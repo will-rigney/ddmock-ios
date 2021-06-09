@@ -11,7 +11,7 @@
 		52C27F822609C1A600D04B74 /* DDMockiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9118D8B1223F1AE300195DC1 /* DDMockiOS.framework */; };
 		9118D8B6223F1AE300195DC1 /* DDMockiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 9118D8B4223F1AE300195DC1 /* DDMockiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9118D8C0223F1B4C00195DC1 /* DDMockURLProtocolClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BC223F1B4C00195DC1 /* DDMockURLProtocolClass.swift */; };
-		9118D8C1223F1B4C00195DC1 /* DDMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BD223F1B4C00195DC1 /* DDMock.swift */; };
+		9118D8C1223F1B4C00195DC1 /* DDMockiOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BD223F1B4C00195DC1 /* DDMockiOS.swift */; };
 		9118D8C2223F1B4C00195DC1 /* MockEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BE223F1B4C00195DC1 /* MockEntry.swift */; };
 		9118D8C3223F1B4C00195DC1 /* UserDefaultsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BF223F1B4C00195DC1 /* UserDefaultsHelper.swift */; };
 		C9334FBD264D1AB500190EB7 /* general.json in Resources */ = {isa = PBXBuildFile; fileRef = C9334FBC264D1AB500190EB7 /* general.json */; };
@@ -45,7 +45,7 @@
 		9118D8B4223F1AE300195DC1 /* DDMockiOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDMockiOS.h; sourceTree = "<group>"; };
 		9118D8B5223F1AE300195DC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9118D8BC223F1B4C00195DC1 /* DDMockURLProtocolClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDMockURLProtocolClass.swift; sourceTree = "<group>"; };
-		9118D8BD223F1B4C00195DC1 /* DDMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDMock.swift; sourceTree = "<group>"; };
+		9118D8BD223F1B4C00195DC1 /* DDMockiOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDMockiOS.swift; sourceTree = "<group>"; };
 		9118D8BE223F1B4C00195DC1 /* MockEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockEntry.swift; sourceTree = "<group>"; };
 		9118D8BF223F1B4C00195DC1 /* UserDefaultsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsHelper.swift; sourceTree = "<group>"; };
 		C9334FAE264CF8A800190EB7 /* ddmock.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ddmock.py; sourceTree = "<group>"; };
@@ -128,7 +128,7 @@
 		9118D8B3223F1AE300195DC1 /* DDMockiOS */ = {
 			isa = PBXGroup;
 			children = (
-				9118D8BD223F1B4C00195DC1 /* DDMock.swift */,
+				9118D8BD223F1B4C00195DC1 /* DDMockiOS.swift */,
 				9118D8BC223F1B4C00195DC1 /* DDMockURLProtocolClass.swift */,
 				C9815D9D2670635C0056AC3E /* MockRepository.swift */,
 				C9815D95267060EF0056AC3E /* ResponseHelper.swift */,
@@ -326,7 +326,7 @@
 				C9815D9E2670635C0056AC3E /* MockRepository.swift in Sources */,
 				C9334FC8264E998D00190EB7 /* String+Regex.swift in Sources */,
 				9118D8C0223F1B4C00195DC1 /* DDMockURLProtocolClass.swift in Sources */,
-				9118D8C1223F1B4C00195DC1 /* DDMock.swift in Sources */,
+				9118D8C1223F1B4C00195DC1 /* DDMockiOS.swift in Sources */,
 				C9815D96267060EF0056AC3E /* ResponseHelper.swift in Sources */,
 				9118D8C2223F1B4C00195DC1 /* MockEntry.swift in Sources */,
 			);
