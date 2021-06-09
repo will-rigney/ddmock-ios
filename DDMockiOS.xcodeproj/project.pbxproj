@@ -13,12 +13,13 @@
 		9118D8C0223F1B4C00195DC1 /* DDMockURLProtocolClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BC223F1B4C00195DC1 /* DDMockURLProtocolClass.swift */; };
 		9118D8C1223F1B4C00195DC1 /* DDMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BD223F1B4C00195DC1 /* DDMock.swift */; };
 		9118D8C2223F1B4C00195DC1 /* MockEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BE223F1B4C00195DC1 /* MockEntry.swift */; };
-		9118D8C3223F1B4C00195DC1 /* DDMockSettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BF223F1B4C00195DC1 /* DDMockSettingsBundleHelper.swift */; };
+		9118D8C3223F1B4C00195DC1 /* UserDefaultsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9118D8BF223F1B4C00195DC1 /* UserDefaultsHelper.swift */; };
 		C9334FBD264D1AB500190EB7 /* general.json in Resources */ = {isa = PBXBuildFile; fileRef = C9334FBC264D1AB500190EB7 /* general.json */; };
 		C9334FC2264D1CB200190EB7 /* plist.py in Resources */ = {isa = PBXBuildFile; fileRef = C9334FC0264D1CB200190EB7 /* plist.py */; };
 		C9334FC3264D1CB200190EB7 /* swagger_to_plist.py in Resources */ = {isa = PBXBuildFile; fileRef = C9334FC1264D1CB200190EB7 /* swagger_to_plist.py */; };
 		C9334FC8264E998D00190EB7 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9334FC7264E998D00190EB7 /* String+Regex.swift */; };
 		C9334FDD265611E100190EB7 /* mockfiles in Resources */ = {isa = PBXBuildFile; fileRef = C9334FDC265611E100190EB7 /* mockfiles */; };
+		C9815D96267060EF0056AC3E /* ResponseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9815D95267060EF0056AC3E /* ResponseHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +46,7 @@
 		9118D8BC223F1B4C00195DC1 /* DDMockURLProtocolClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDMockURLProtocolClass.swift; sourceTree = "<group>"; };
 		9118D8BD223F1B4C00195DC1 /* DDMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDMock.swift; sourceTree = "<group>"; };
 		9118D8BE223F1B4C00195DC1 /* MockEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockEntry.swift; sourceTree = "<group>"; };
-		9118D8BF223F1B4C00195DC1 /* DDMockSettingsBundleHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDMockSettingsBundleHelper.swift; sourceTree = "<group>"; };
+		9118D8BF223F1B4C00195DC1 /* UserDefaultsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsHelper.swift; sourceTree = "<group>"; };
 		C9334FAE264CF8A800190EB7 /* ddmock.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = ddmock.py; sourceTree = "<group>"; };
 		C9334FB3264CF90400190EB7 /* general.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = general.plist; sourceTree = "<group>"; };
 		C9334FBC264D1AB500190EB7 /* general.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = general.json; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 		C9334FC1264D1CB200190EB7 /* swagger_to_plist.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = swagger_to_plist.py; sourceTree = "<group>"; };
 		C9334FC7264E998D00190EB7 /* String+Regex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Regex.swift"; sourceTree = "<group>"; };
 		C9334FDC265611E100190EB7 /* mockfiles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = mockfiles; sourceTree = "<group>"; };
+		C9815D95267060EF0056AC3E /* ResponseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,7 +128,8 @@
 			children = (
 				9118D8BD223F1B4C00195DC1 /* DDMock.swift */,
 				9118D8BC223F1B4C00195DC1 /* DDMockURLProtocolClass.swift */,
-				9118D8BF223F1B4C00195DC1 /* DDMockSettingsBundleHelper.swift */,
+				C9815D95267060EF0056AC3E /* ResponseHelper.swift */,
+				9118D8BF223F1B4C00195DC1 /* UserDefaultsHelper.swift */,
 				9118D8BE223F1B4C00195DC1 /* MockEntry.swift */,
 				9118D8B4223F1AE300195DC1 /* DDMockiOS.h */,
 				C9334FC7264E998D00190EB7 /* String+Regex.swift */,
@@ -316,10 +319,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9118D8C3223F1B4C00195DC1 /* DDMockSettingsBundleHelper.swift in Sources */,
+				9118D8C3223F1B4C00195DC1 /* UserDefaultsHelper.swift in Sources */,
 				C9334FC8264E998D00190EB7 /* String+Regex.swift in Sources */,
 				9118D8C0223F1B4C00195DC1 /* DDMockURLProtocolClass.swift in Sources */,
 				9118D8C1223F1B4C00195DC1 /* DDMock.swift in Sources */,
+				C9815D96267060EF0056AC3E /* ResponseHelper.swift in Sources */,
 				9118D8C2223F1B4C00195DC1 /* MockEntry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -44,7 +44,6 @@ public final class DDMock {
     public func initialise(strict: Bool = false) {
        // todo: kinda not great maybe
        // this is called by the client on the singleton? archaic
-
         self.strict = strict
 
         // todo: resource path
@@ -74,11 +73,14 @@ public final class DDMock {
         matchedPaths.removeAll()
     }
 
+    // should be a "get or insert" function in the map
     private func createMockEntry(url: URL) {
 
+        // todo: check this matching
         let fileName = "/" + url.lastPathComponent
         let key = url.path.replacingOccurrences(of: fileName, with: "")
-        // separate the assignment
+
+        // todo: separate the assignment
         if var entry = mockEntries[key] {
             entry.files.append(url.path)
             mockEntries[key] = entry
@@ -107,22 +109,29 @@ public final class DDMock {
         return entry
     }
 
-    ///
-    func getMockEntryByPath(path: String, method: String) -> MockEntry? {
+    /// wraps internal to always use false for isTest param
+    internal func getMockEntryByPath(path: String, method: String) -> MockEntry? {
         return getMockEntryInternal(path: path, method: method, isTest: false)
     }
 
 
-    // todo: what is the point of EntrySetting
-    func hasMockEntryByPath(path: String, method: String) -> EntrySetting {
-        switch getMockEntryInternal(path: path, method: method, isTest: true)?.useRealAPI() {
-        case .none:
-            return .notFound
-        case .some(false):
-            return .mocked
-        case .some(true):
-            return .useRealAPI
+    /// todo: doc
+    internal func hasMockEntryByPath(path: String, method: String) -> Bool {
+
+        // idk what the idea of this map function useRealAPI
+
+        // get the entry
+        // todo: cache
+        guard let entry = getMockEntryInternal(
+                path: path,
+                method: method,
+                isTest: true) else {
+
+            return false
         }
+
+        // entry can override this value itself
+        return entry.useRealAPI()
     }
 
     // called by the two above functions
@@ -143,6 +152,7 @@ public final class DDMock {
     }
 
 
+    // todo: high complexity function in the public interface
     private func getRegexEntry(path: String) -> MockEntry? {
         var matches = [MockEntry]()
         for key in mockEntries.keys {
@@ -161,6 +171,7 @@ public final class DDMock {
         return matches.first
     }
 
+    // todo: this response should be configurable somehow like the header
     func getData(_ entry: MockEntry) -> Data? {
         var data: Data? = nil
         let f = entry.files[entry.getSelectedFile()]
