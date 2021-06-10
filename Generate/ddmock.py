@@ -132,7 +132,7 @@ def main(mockfiles_path):
 
         def replaceKeys(item, path, filename):
             # todo: clarify what is happening
-            item['DefaultValue'] = item['key'].replace(
+            item['DefaultValue'] = item['DefaultValue'].replace(
                 "$endpointPathName", path)
             item['Key'] = item['key'].replace("$endpointPathKey", filename)
 
@@ -160,37 +160,21 @@ def main(mockfiles_path):
             # newplist = newplist.replace("$mockFiles", mockFiles)
 
             plistlib.dump(new_endpoint, fout, fmt=plistlib.FMT_XML)
-            # fout.write(new_endpoint)
-
-    # insert: mb generate general plist? even from some config?
-
-    # general_plist_path = "DDMockiOS/DDMockiOS/general.plist"
 
     # create general plist from json
-    # this could be from
     print("Creating general.plist...")
+
+    # load the template
     general = path.joinpath("general.json")
     general = load_json(general)
+
+    # dump plist
     with open(os.path.join(settings_location, "general.plist"), "wb") as output:
         plistlib.dump(general, output, fmt=plistlib.FMT_XML)
-    # copy static file
-    # failing here because it's not from cwd or a variable
-    # todo: some var for location
-    # copies the "general.plist"
-    # todo: generate from the lib
-    # shutil.copyfile(general_plist_path,
-        # os.path.join(settings_location, "general.plist"))
-
-    # copies from one static path to another (pointlessly?)
-
-    # close the plist
-    # root = root + "\n\t</array>"
-    # root = root + "\n</dict>"
-    # root = root + "\n</plist>"
 
     # write root plist
+    print("Writing root plist...")
     with open(settings_location + "Root.plist", "wb") as output:
-        print("Writing root plist...")
         plistlib.dump(root, output, fmt=plistlib.FMT_XML)
 
     # finished
