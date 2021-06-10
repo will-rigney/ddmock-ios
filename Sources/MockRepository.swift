@@ -35,7 +35,6 @@ internal class MockRepository {
             }
 
                 // get the key
-                // todo: check absolute string is sane key
                 let key = url.deletingLastPathComponent().absoluteString
 
                 // put into the dictionary
@@ -66,7 +65,7 @@ internal class MockRepository {
         }
 
         // entry can override this value itself
-        return entry.useRealAPI()
+        return !entry.useRealAPI()
     }
 
     /**
@@ -79,7 +78,7 @@ internal class MockRepository {
         onMissing: (_ path: String?) -> Void) -> MockEntry? {
 
         // get the entry
-        let entry = getMockEntry(path: path, method: "") // todo
+        let entry = getMockEntry(path: path, method: method)
 
         // If strict mode is enabled, a missing entry is an error. Call handler.
         // this will still fall through
@@ -102,10 +101,11 @@ internal class MockRepository {
      need to include the method to get it in a way that makes sense
      */
     private func getMockEntry(path: String, method: String) -> MockEntry? {
-        // method string is always lowercased
-        let fullPath = path.replacingRegexMatches(
+        let matches = path.replacingRegexMatches(
             pattern: "^/",
-            replaceWith: "") + "/" + method.lowercased()
+            replaceWith: "")
+        // method string is always lowercased
+        let fullPath = "\(matches)/\(method.lowercased())/"
 
         // return an entry for either a non-wildcard or wildcard path
         return mockEntries[fullPath] ?? getRegexEntry(path: fullPath)

@@ -64,7 +64,9 @@ class ResponseHelper {
 
         // get the path
         // todo: isn't this encoded in the entry?
-        let path = entry.path
+        // this is the path of the mockfiles folder
+
+        let path = Bundle.main.resourcePath! + Constants.mockDirectory
 
         let url = URL(fileURLWithPath: "\(path)/\(file)")
 

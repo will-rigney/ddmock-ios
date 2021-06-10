@@ -6,10 +6,6 @@ import Foundation
  */
 public final class DDMock {
 
-    // todo: make this more obvious or configurable
-    /// path under resources directory
-    private let mockDirectory = "/mockfiles"
-
     /// enforces mocks only and no API fall-through
     internal var strict: Bool = false
 
@@ -47,7 +43,7 @@ public final class DDMock {
         self.strict = strict
 
         // todo: resource path
-        let path = Bundle.main.resourcePath! + mockDirectory
+        let path = Bundle.main.resourcePath! + Constants.mockDirectory
 
         // load the files in the mock directory
         repository = MockRepository(path: path, fm: FileManager.default)

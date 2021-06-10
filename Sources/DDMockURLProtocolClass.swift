@@ -44,7 +44,7 @@ public class DDMockURLProtocolClass: URLProtocol {
 
      This is an abstract class by default.
      */
-    override public class func canonicalRequest(for request: URLRequest) -> URLRequest {
+    public override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
 
@@ -52,7 +52,7 @@ public class DDMockURLProtocolClass: URLProtocol {
     /**
      this is where everything happens
      */
-    override public func startLoading() {
+    public override func startLoading() {
 
         // fetch item
         guard
@@ -113,4 +113,7 @@ public class DDMockURLProtocolClass: URLProtocol {
                 })
     }
 
+    public override func stopLoading() {
+        // nothing actually loading
+    }
 }

@@ -29,7 +29,7 @@ struct MockEntry: Codable {
         self.files = files
     }
 
-    // this is the index of the selected file in the files list for an entry
+    // this is the key for the selected file in the files list for an entry
     func getSelectedFile() -> String {
         let index = UserDefaultsHelper.getInteger(key: path, item: .mockFile)
         return files[index]
