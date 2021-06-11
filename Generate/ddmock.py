@@ -28,28 +28,29 @@ def generate_map(mockfiles_path):
         # iterate through mockfiles
         for file in files:
             # only the json files
-            if file.endswith(".json"):
+            if not file.endswith(".json"):
+                continue
 
-                # todo: think there is a more normal way to check for only json files
+            # todo: think there is a more normal way to check for only json files
 
-                # this is to get the key from the json object path
-                # we can do this more directly
-                endpointPath = subdir.replace(mockfiles_path, "")
+            # this is to get the key from the json object path
+            # we can do this more directly
+            endpointPath = subdir.replace(mockfiles_path, "")
 
-                # strip the leading slash if present
-                # todo: we should use a Path object instead
-                if endpointPath.startswith("/"):
-                    endpointPath = endpointPath.replace("/", "", 1)
+            # strip the leading slash if present
+            # todo: we should use a Path object instead
+            if endpointPath.startswith("/"):
+                endpointPath = endpointPath.replace("/", "", 1)
 
-                # map is accessed here (therefore make this a function return point)
-                # this logic is duplicated in the swift code
-                # this does the same thing as swift code to run it
-                # "get or insert"
-                if endpointPath in endpoint_map:
-                    files = endpoint_map[endpointPath]
-                    files.append(file)
-                else:
-                    endpoint_map[endpointPath] = [file]
+            # map is accessed here (therefore make this a function return point)
+            # this logic is duplicated in the swift code
+            # this does the same thing as swift code to run it
+            # "get or insert"
+            if endpointPath in endpoint_map:
+                files = endpoint_map[endpointPath]
+                files.append(file)
+            else:
+                endpoint_map[endpointPath] = [file]
 
     return endpoint_map
 
@@ -69,25 +70,23 @@ def create_item(filename):
     return new_item
 
 
+# get resource path from canonical path of script
+def get_ddmock_path(resources_path):
+    path = os.path.dirname(os.path.realpath(__file__))
+    path = pathlib.Path(path)
+    path = path.parent.joinpath(resources_path).absolute()
+    return path
+
+
 def main(mockfiles_path, output_path):
-    cwd = os.getcwd()
-    print(f"wd: {cwd}")
-
-    # get resource path from canonical path of script
-    def get_ddmock_path(dir):
-        path = os.path.dirname(os.path.realpath(__file__))
-        path = pathlib.Path(path)
-        path = path.parent.joinpath(dir).absolute()
-        return path
-
     path = get_ddmock_path("Resources")
-
-    print(f"templates: {path}")
+    print(f"Template path: {path}")
 
     # first create the map
     # this is where the directory traversal happens
     print("Creating map of endpoint paths and mock files...")
     endpoint_map = generate_map(mockfiles_path)
+
     print(f"{endpoint_map}")
 
     # todo: better / dynamic configuration
@@ -110,6 +109,7 @@ def main(mockfiles_path, output_path):
     endpoint = load_json_resource(path.joinpath("endpoint.json"))
 
     # **
+    # what do we get out of this block? make it a function
     # for path & files in map
     for endpoint_path, files in endpoint_map.items():
 
@@ -148,7 +148,6 @@ def main(mockfiles_path, output_path):
                     new_item[key] = value
 
             new_endpoint["PreferenceSpecifiers"][index] = new_item
-                # item['Key'] = item['key'].replace("$endpointPathKey", filename)
 
         # set the mockfile "values" and "titles" fields
         for setting in filter(lambda item: item['Title'] == "Mock file", new_endpoint['PreferenceSpecifiers']):
@@ -158,19 +157,18 @@ def main(mockfiles_path, output_path):
         with open(settings_location + filename + ".plist", "wb") as fout:
             plistlib.dump(new_endpoint, fout, fmt=plistlib.FMT_XML)
 
-    # create general plist from json
-    print("Creating general.plist...")
-
-    # load the template
+    # create general plist from json template
+    print("Load general.plist template...")
     general = path.joinpath("general.json")
     general = load_json_resource(general)
 
-    # dump plist
+    # write general plist
+    print("Writing general.plist...")
     with open(os.path.join(settings_location, "general.plist"), "wb") as output:
         plistlib.dump(general, output, fmt=plistlib.FMT_XML)
 
     # write root plist
-    print("Writing root plist...")
+    print("Writing Root.plist...")
     with open(settings_location + "Root.plist", "wb") as output:
         plistlib.dump(root, output, fmt=plistlib.FMT_XML)
 
