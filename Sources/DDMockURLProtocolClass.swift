@@ -24,6 +24,9 @@ public class DDMockURLProtocolClass: URLProtocol {
     // todo: is this called for every request? is the mock retreived 2ce?
     ///
     public override class func canInit(with task: URLSessionTask) -> Bool {
+
+        if DDMock.shared.strict { return true }
+
         guard
             let req = task.currentRequest,
             let path = req.url?.path,
@@ -113,6 +116,7 @@ public class DDMockURLProtocolClass: URLProtocol {
                 })
     }
 
+    /// Required override of abstract prototype, does nothing.
     public override func stopLoading() {
         // nothing actually loading
     }
