@@ -9,7 +9,6 @@ import argparse
 import copy
 
 
-
 # todo: visibility
 
 
@@ -58,7 +57,7 @@ def generate_map(mockfiles_path):
 
 # open a file with the name res and return it
 def load_json_resource(res):
-    print(f"{res}")
+    logging.info(f"loading json resource: {res}")
     with open(res, "r") as file:
         res = json.load(file)
     return res
@@ -86,7 +85,7 @@ def create_endpoint_plist(endpoint, endpoint_path, filename, files):
     # copy a new endpoint object
     new_endpoint = copy.deepcopy(endpoint)
 
-    print(f"new endpoint: {new_endpoint}")
+    logging.info(f"new endpoint: {new_endpoint}")
 
     # replace variable keys in all the endpoint items
 
@@ -116,30 +115,31 @@ def create_endpoint_plist(endpoint, endpoint_path, filename, files):
 
 
 def main(mockfiles_path, output_path):
+    print("Running *.plist generation...")
+    print(f"Path to mockfiles: {mockfiles_path}")
+    print(f"Output path: {output_path}")
+
     path = get_ddmock_path("Resources")
-    print(f"Template path: {path}")
+    # print(f"Template path: {path}")
 
     # first create the map
     # this is where the directory traversal happens
     print("Creating map of endpoint paths and mock files...")
     endpoint_map = generate_map(mockfiles_path)
 
-    print(f"{endpoint_map}")
-
-    # todo: better / dynamic configuration
-    settings_location = output_path
+    # todo: lazy evaluation in logging
+    logging.info(f" map: {endpoint_map}")
 
     # start creating settings bundle
-    print(f"Creating Settings.bundle at {settings_location}...")
+    print(f"Creating Settings.bundle...")
 
     # Settings.bundle is really just a directory
     # first create directory if it doesn't exist
-    if not os.path.exists(settings_location):
-        os.makedirs(settings_location)
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
 
     # load templates
     print("Loading JSON templates...")
-
     root = load_json_resource(path.joinpath("root.json"))
     endpoint = load_json_resource(path.joinpath("endpoint.json"))
 
@@ -160,7 +160,7 @@ def main(mockfiles_path, output_path):
             endpoint, endpoint_path, filename, files)
 
         # dump the endpoint to plist
-        with open(settings_location + filename + ".plist", "wb") as fout:
+        with open(output_path + filename + ".plist", "wb") as fout:
             plistlib.dump(new_endpoint, fout, fmt=plistlib.FMT_XML)
 
     # create general plist from json template
@@ -170,12 +170,12 @@ def main(mockfiles_path, output_path):
 
     # write general plist
     print("Writing general.plist...")
-    with open(os.path.join(settings_location, "general.plist"), "wb") as output:
+    with open(os.path.join(output_path, "general.plist"), "wb") as output:
         plistlib.dump(general, output, fmt=plistlib.FMT_XML)
 
     # write root plist
     print("Writing Root.plist...")
-    with open(settings_location + "Root.plist", "wb") as output:
+    with open(output_path + "Root.plist", "wb") as output:
         plistlib.dump(root, output, fmt=plistlib.FMT_XML)
 
     # finished
@@ -184,14 +184,19 @@ def main(mockfiles_path, output_path):
 
 if __name__ == "__main__":
 
-    # parse arguments
+    # create argument parser
     parser = argparse.ArgumentParser(
         description='Generate Settings.bundle for DDMockiOS')
+
+    # 1st argument is mockfiles directory
     parser.add_argument('mockfiles_path', nargs='?',
                         default="Resources/mockfiles")
+
+    # 2nd argument is output path
     parser.add_argument('output_path', nargs='?',
                         default="Settings.bundle/")
 
+    # parse arguments
     args = parser.parse_args()
 
     # start execution
