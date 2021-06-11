@@ -6,6 +6,8 @@ import pathlib
 import logging
 import json
 import argparse
+import copy
+
 
 # todo: visibility
 
@@ -19,32 +21,28 @@ def generate_map(mockfiles_path):
     # walks all the mockfiles and for each creates just the leading path?
 
     # recursive directory traversal
-    # todo: what is subdir
+    # todo: define subdir - it is the subdirectory configured (?)
     for subdir, dirs, files in os.walk(mockfiles_path):
         print(subdir)
 
         # iterate through mockfiles
         for file in files:
             # only the json files
-            if files.endswith(".json"):
+            if file.endswith(".json"):
 
                 # todo: think there is a more normal way to check for only json files
-
-                # create path
-                # filepath = f"{subdir}/{file}"
 
                 # this is to get the key from the json object path
                 # we can do this more directly
                 endpointPath = subdir.replace(mockfiles_path, "")
 
                 # strip the leading slash if present
-                # todo: presumably this is always present?
-                # maybe not for relative paths
-                # we should use a Path object instead
+                # todo: we should use a Path object instead
                 if endpointPath.startswith("/"):
                     endpointPath = endpointPath.replace("/", "", 1)
 
-                # map is accessed here (therefore make this a function duh)
+                # map is accessed here (therefore make this a function return point)
+                # this logic is duplicated in the swift code
                 # this does the same thing as swift code to run it
                 # "get or insert"
                 if endpointPath in endpoint_map:
@@ -56,24 +54,10 @@ def generate_map(mockfiles_path):
     return endpoint_map
 
 
-def load_json(path):
-    with open(path, "r") as file:
-        return json.load(file)
-
-
-def replace_keys(item, path, filename):
-    # todo: clarify what is happening
-    # todo: make a type for these string keys
-    item['DefaultValue'] = item['DefaultValue'].replace(
-        "$endpointPathName", path)
-    print(f"dv: {item['DefaultValue']}")
-    item['Key'] = item['key'].replace("$endpointPathKey", filename)
-    return item
-
-
 def load_json_resource(res):
     print(f"{res}")
-    res = load_json(res)
+    with open(res, "r") as file:
+        res = json.load(file)
     return res
 
 
@@ -90,9 +74,14 @@ def main(mockfiles_path, output_path):
     print(f"wd: {cwd}")
 
     # get resource path from canonical path of script
-    path = os.path.dirname(os.path.realpath(__file__))
-    path = pathlib.Path(path)
-    path = path.parent.joinpath("Resources").absolute()
+    def get_ddmock_path(dir):
+        path = os.path.dirname(os.path.realpath(__file__))
+        path = pathlib.Path(path)
+        path = path.parent.joinpath(dir).absolute()
+        return path
+
+    path = get_ddmock_path("Resources")
+
     print(f"templates: {path}")
 
     # first create the map
@@ -120,17 +109,6 @@ def main(mockfiles_path, output_path):
     root = load_json_resource(path.joinpath("root.json"))
     endpoint = load_json_resource(path.joinpath("endpoint.json"))
 
-    # ** short circuit for testing
-
-#    with open(settings_location + "Root.plist", "rb") as root:
-    # with open("resources/endpoint.json", "w+") as output:
-    #     plist_bytes = plist.encode(encoding='utf-8')
-    #     plist = plistlib.loads(plist_bytes, fmt=plistlib.FMT_XML)
-    #     json.dump(plist, output, indent=4)
-    #     print("dumped root json")
-
-    # return
-
     # **
     # for path & files in map
     for endpoint_path, files in endpoint_map.items():
@@ -147,19 +125,30 @@ def main(mockfiles_path, output_path):
 
         # create a copy of the endpoint plist replacing
         # the $endpointPathName key     -> endpointPath
-        # the $indexMockFiles key       -> indexes
-        # the $mockfiles key            -> files[i]
-        # then write the new file at settings_location + filename + .plist
 
-        # creating plist file for endpoint
+        # copy endpoint plist
+        new_endpoint = copy.deepcopy(endpoint)
 
-        # make a new endpoint plist instance
-        new_endpoint = endpoint
+        print(f"ne: {new_endpoint}")
 
         # replace keys in all the endpoint items
-        # todo: this doesn't work, try again
 
-        new_endpoint["PreferenceSpecifiers"] = map(lambda item: replace_keys, new_endpoint["PreferenceSpecifiers"])
+        # for each item in preference specifiers list
+        for index, item in enumerate(new_endpoint["PreferenceSpecifiers"]):
+            # construct a new item
+            new_item = {}
+            # for every key value par in the item dict
+            for key, value in item.items():
+                try:
+                    new_value = value.replace("$endpointPathName", f"{endpoint_path}")
+                    new_value = new_value.replace("$endpointPathKey", filename)
+                    new_item[key] = new_value
+                except AttributeError:
+                    # value can be any type
+                    new_item[key] = value
+
+            new_endpoint["PreferenceSpecifiers"][index] = new_item
+                # item['Key'] = item['key'].replace("$endpointPathKey", filename)
 
         # set the mockfile "values" and "titles" fields
         for setting in filter(lambda item: item['Title'] == "Mock file", new_endpoint['PreferenceSpecifiers']):
@@ -174,7 +163,7 @@ def main(mockfiles_path, output_path):
 
     # load the template
     general = path.joinpath("general.json")
-    general = load_json(general)
+    general = load_json_resource(general)
 
     # dump plist
     with open(os.path.join(settings_location, "general.plist"), "wb") as output:
