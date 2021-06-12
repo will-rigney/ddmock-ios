@@ -22,7 +22,7 @@ public class DDMockURLProtocolClass: URLProtocol {
     }
 
     // todo: is this called for every request? is the mock retreived 2ce?
-    ///
+    // yes it is
     public override class func canInit(with task: URLSessionTask) -> Bool {
 
         if DDMock.shared.strict { return true }
@@ -78,12 +78,18 @@ public class DDMockURLProtocolClass: URLProtocol {
         }
 
         // get response data
-        // todo: check in what case could this be nil\\
+        // todo: check in what case could this be nil
         let data: Data? = ResponseHelper.getData(entry)
 
         // header dictionary
-        // todo: more configuration
-        let headers = ResponseHelper.getMockHeaders(contentLength: data?.count)
+        var headers = ResponseHelper.getMockHeaders(contentLength: data?.count)
+
+        // if the entry has headers merge those too
+        if let entryHeaders = entry.getHeaders() {
+            headers.merge(
+                entryHeaders,
+                uniquingKeysWith: {(_, newValue) in newValue})
+        }
 
         // get status code
         let statusCode = entry.getStatusCode()
@@ -98,10 +104,10 @@ public class DDMockURLProtocolClass: URLProtocol {
         }
 
         // simulate response time
-        let time = TimeInterval(entry.getResponseTime() / 1000)
+        let time = TimeInterval(Float(entry.getResponseTime()) / 1000.0)
 
         // just use regular timer to async return the response
-        // async + await would be better
+        // todo: this isn't working correctly
         Timer.scheduledTimer(
             withTimeInterval: time,
             repeats: false,

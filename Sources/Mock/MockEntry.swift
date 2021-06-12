@@ -53,7 +53,29 @@ struct MockEntry: Codable {
         return UserDefaultsHelper.getObject(
             key: path,
             item: .responseTime) ?? MockEntry.defaultResponseTime
+    }
 
+    func getHeaders() -> [String: String]? {
+        // get a group or an array?
+        // ok this one is funny
+        var headers: [String: String] = [:]
+        func getHeaderKey(_ i: Int) -> String {
+            let selectedFile = getSelectedFile()
+            let trimIndex = selectedFile.lastIndex(of: ".")
+            // probably a more readable way
+            let filename =  trimIndex != nil
+                ? String(selectedFile.prefix(upTo: trimIndex!))
+                : selectedFile
+            return "\(filename)\(i)"
+        }
+
+        var i = 0
+        while
+            let (title, value) = UserDefaultsHelper.getTitleValuePair(key: getHeaderKey(i)) {
+            headers[title ?? ""] = value ?? ""
+            i += 1
+        }
+        return headers
     }
 
     private func getEndpointUseRealAPI(key: String) -> Bool {

@@ -50,6 +50,13 @@ public final class DDMock {
     }
 
     /**
+     reset the history
+     */
+    public func clearHistory() {
+        matchedPaths.removeAll()
+    }
+
+    /**
      Check if an entry exists for a given path
      */
     func hasEntry(path: String, method: String) -> Bool {
@@ -76,12 +83,5 @@ public final class DDMock {
 
         // return the entry
         return entry
-    }
-
-    /**
-     reset the history
-     */
-    public func clearHistory() {
-        matchedPaths.removeAll()
     }
 }

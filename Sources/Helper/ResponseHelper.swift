@@ -43,6 +43,15 @@ class ResponseHelper {
         return headers
     }
 
+    // this maybe doesn't belong here
+    static func getKeyFromPath(path: String, method: String) -> String {
+        let matches = path.replacingRegexMatches(
+            pattern: "^/",
+            replaceWith: "")
+        // method string is always lowercased
+        return "\(matches)/\(method.lowercased())/"
+    }
+
     static func createMockResponse(
         url: URL,
         statusCode: Int,
@@ -62,10 +71,7 @@ class ResponseHelper {
 
         let file = entry.getSelectedFile()
 
-        // get the path
-        // todo: isn't this encoded in the entry?
-        // this is the path of the mockfiles folder
-
+//        todo: file should just be a string of the directory (?)
         let path = Bundle.main.resourcePath! + Constants.mockDirectory
 
         let url = URL(fileURLWithPath: "\(path)/\(file)")

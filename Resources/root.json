@@ -13,7 +13,8 @@
         },
         {
             "Title": "MOCK",
-            "Type": "PSGroupSpecifier"
+            "Type": "PSGroupSpecifier",
+            "FooterText": "Note that strict mode being set at build time will override the 'Use real APIs' setting."
         }
     ],
     "StringsTable": "Root"
