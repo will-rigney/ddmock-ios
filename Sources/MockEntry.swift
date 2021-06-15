@@ -74,6 +74,16 @@ struct MockEntry: Codable {
 
     // nice
     func getHeaders() -> [String: String]? {
+        // needs to return the overridden value from userdefaults
+        var headers = self.headers
+        // get all the values from user defaults if they exist
+        for title in headers.keys {
+            let key = "\(path.replacingOccurrences(of: "/", with: "."))\(title)"
+            if let value = UserDefaultsHelper.getString(key: key, item: .headerValue) {
+                headers[title] = value
+            }
+        }
+
         return headers
     }
 

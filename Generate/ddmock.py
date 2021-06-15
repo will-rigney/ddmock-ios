@@ -224,7 +224,7 @@ def main(mockfiles_path, output_path):
 
         # check if there are any headers and add them if there are
         # for file in files:
-            # get the key for the file e.g. todos.get.010_title
+            # get the key for the file e.g. todos.get.01
         key = get_canonical_key(f"{endpoint_path}")
 
         try:
@@ -238,7 +238,7 @@ def main(mockfiles_path, output_path):
         # use python dicts to build ios plists more easily
 
         # todo: list comprehension is more pythonic
-        for (index, (title, value)) in enumerate(headers.items()):
+        for (title, value) in headers.items():
 
             # use a header for the parammeter title
             group = create_headers_group_item(title)
@@ -246,7 +246,7 @@ def main(mockfiles_path, output_path):
             new_endpoint['PreferenceSpecifiers'].append(group)
 
             # create the user defaults key for the header value
-            value_key = f"{key}{index}_value"
+            value_key = f"{key}.{title}_value"
             # create a new item for the header
             value = create_headers_item(value_key, "Value", value)
             # add the item to the list of preference specifiers
