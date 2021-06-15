@@ -25,8 +25,8 @@ def generate_map(mockfiles_path):
     # todo: define subdir - it is the subdirectory configured (?)
     for current, dirs, files in os.walk(mockfiles_path):
 
-        # iterate through mockfiles
-        for file in files:
+        # iterate through mockfiles, sorted alphabetically
+        for file in sorted(files):
             # todo: open this up to all filetypes
             # should potentially change the application type
             # or do this with headers?
@@ -35,25 +35,26 @@ def generate_map(mockfiles_path):
                 continue
 
             # process header files separately
-            if file.endswith(".h.json"):
+            if file == "h.json":
                 with open(current + '/' + file, "r+") as headers:
                     res = json.load(headers)
-                    # todo: duplicate
-                    key = current.replace(mockfiles_path, "")
 
-                    # strip the leading slash if present
-                    if key.startswith("/"):
-                        key = key.replace("/", "", 1)
+                # todo: duplicate
+                key = current.replace(mockfiles_path, "")
 
-                    # add the trailing file path for header keys
-                    key = f"{get_canonical_key(key)}.{file}"
+                # strip the leading slash if present
+                if key.startswith("/"):
+                    key = key.replace("/", "", 1)
 
-                    # not working in xcode
-                    # key.removesuffix(".h.json")
-                    if key.endswith('.h.json'):
-                        key = key[:-7]  # ugly magic
+                # add the trailing file path for header keys
+                key = f"{get_canonical_key(key)}.{file}"
 
-                    header_map[key] = res
+                # not working in xcode
+                # key.removesuffix(".h.json")
+                if key.endswith('.h.json'):
+                    key = key[:-7]  # ugly magic
+
+                header_map[key] = res
                 continue
 
             # currently this only needs to look at files
@@ -222,45 +223,36 @@ def main(mockfiles_path, output_path):
         # todo: this is currently not very good, selecting different mockfiles should change headers
 
         # check if there are any headers and add them if there are
-        for file in files:
-            try:
-                # try and get some headers
-                # this is the header key e.g. todos.get.010_title
-                key = get_canonical_key(f"{endpoint_path}.{file[:-5]}")
-                headers = header_map[key]
+        # for file in files:
+            # get the key for the file e.g. todos.get.010_title
+        key = get_canonical_key(f"{endpoint_path}")
 
-            except KeyError:
-                print(f"no headers for {endpoint_path}.{file}, key: {key}")
-                continue
+        try:
+            # try and get some headers
+            headers = header_map[key]
 
-            # use python dicts to build ios plists more easily
+        except KeyError:
+            print(f"no headers for {endpoint_path}, key: {key}")
+            continue
 
-            # todo: list comprehension is more pythonic
-            for (index, (title, value)) in enumerate(headers.items()):
+        # use python dicts to build ios plists more easily
 
-                # if we survived this far, add the group settings heading
-                # group specifiers are needed for the correct ordering
-                group = create_headers_group_item(title)
-                new_endpoint['PreferenceSpecifiers'].append(group)
+        # todo: list comprehension is more pythonic
+        for (index, (title, value)) in enumerate(headers.items()):
 
-                # separate items for title and value
-                # keys for headers is endpoint path + header index
-                # this is the oother header key
-                key = get_canonical_key(f"{endpoint_path}.{file[:-5]}")
-                key = f"{key}{index}_title"
-                # create a new item for the header
-                group = create_headers_item(key, "Title", title)
-                # add the item to the list of preference specifiers
-                new_endpoint['PreferenceSpecifiers'].append(group)
+            # use a header for the parammeter title
+            group = create_headers_group_item(title)
+            # add the item to the list of preference specifiers
+            new_endpoint['PreferenceSpecifiers'].append(group)
 
-                key = get_canonical_key(f"{endpoint_path}.{file[:-5]}")
-                key = f"{key}{index}_value"
-                # create a new item for the header
-                group = create_headers_item(key, "Value", value)
-                # add the item to the list of preference specifiers
-                new_endpoint['PreferenceSpecifiers'].append(group)
+            # create the user defaults key for the header value
+            value_key = f"{key}{index}_value"
+            # create a new item for the header
+            value = create_headers_item(value_key, "Value", value)
+            # add the item to the list of preference specifiers
+            new_endpoint['PreferenceSpecifiers'].append(value)
 
-            print(f"added headers: {headers}")
+        print(f"added headers: {headers}")
 
         # dump the endpoint to plist
         with open(output_path + canonical_key + ".plist", "wb") as fout:

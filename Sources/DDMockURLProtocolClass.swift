@@ -79,7 +79,7 @@ public class DDMockURLProtocolClass: URLProtocol {
 
         // get response data
         // todo: check in what case could this be nil
-        let data: Data? = ResponseHelper.getData(entry)
+        let data: Data? = FileHelper.getMockData(entry)
 
         // header dictionary
         var headers = ResponseHelper.getMockHeaders(contentLength: data?.count)

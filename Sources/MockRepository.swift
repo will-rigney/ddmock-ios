@@ -14,7 +14,9 @@ final class MockRepository {
      iterate through files & populate the mocks
      */
     init(path: String, fm: FileManager) {
+
         var entries: [String: MockEntry] = [:]
+        var headers: [String: [String: String]] = [:]
 
         // load mock files
         fm
@@ -27,26 +29,47 @@ final class MockRepository {
 
                     return
                 }
-                guard
-                    // todo: new file schema?
-                    url.pathExtension == "json" else {
-
+                // todo: next step is to alllow arbitrary types
+                // this might cause an issue with string slices in python
+                guard url.pathExtension == "json" else {
                     return
                 }
 
                 // get the key
                 let key = url.deletingLastPathComponent().absoluteString
 
+                // if this is a file describing headers
+                if url.lastPathComponent == "h.json" {
+                    // actually parse the file here!
+                    // need a real url
+                    if
+                        let result = FileHelper.getHeaders(url: url) {
+                        // add the headers to the entry
+                        // definitely much more pythonic ways to do this
+                        headers[key] = result
+                    }
+
+                    return
+                }
+
                 // put into the dictionary
                 if var entry = entries[key] {
                    // add the mock to the existing file list for this entry
-                    entry.files.append(url.path)
+                    entry.files.append(url)
                 }
                 else {
                     // create a new entry
-                    entries[key] = MockEntry(path: key, files: [url.path])
+                    let entry = MockEntry(
+                        path: key,
+                        files: [url])
+                    entries[key] = entry
                 }
             }
+
+        // add all of the headers to the entries
+        headers.forEach { (item, value) in
+            entries[item]?.headers = value
+        }
 
         self.storage = MockStorage(entries: entries)
     }

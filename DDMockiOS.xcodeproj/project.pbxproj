@@ -20,6 +20,7 @@
 		C9815D9E2670635C0056AC3E /* MockRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9815D9D2670635C0056AC3E /* MockRepository.swift */; };
 		C9B28FB32671C209007C31A9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B28FB22671C209007C31A9 /* Constants.swift */; };
 		C9B29046267508B1007C31A9 /* MockStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B29045267508B1007C31A9 /* MockStorage.swift */; };
+		C9DA4069267608010080813A /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DA4068267608010080813A /* FileHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		C9B28EE62670D9CE007C31A9 /* endpoint.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = endpoint.json; sourceTree = "<group>"; };
 		C9B28FB22671C209007C31A9 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C9B29045267508B1007C31A9 /* MockStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockStorage.swift; sourceTree = "<group>"; };
+		C9DA4068267608010080813A /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,48 +166,17 @@
 			children = (
 				9118D8B4223F1AE300195DC1 /* DDMockiOS.h */,
 				C9B28FB22671C209007C31A9 /* Constants.swift */,
-				C9B2904426750890007C31A9 /* Public */,
-				C9B2904F267508FD007C31A9 /* Mock */,
-				C9B29049267508E1007C31A9 /* Helper */,
-				C9B2904C267508EA007C31A9 /* Extension */,
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		C9B2904426750890007C31A9 /* Public */ = {
-			isa = PBXGroup;
-			children = (
 				9118D8BD223F1B4C00195DC1 /* DDMockiOS.swift */,
 				9118D8BC223F1B4C00195DC1 /* DDMockURLProtocolClass.swift */,
-			);
-			path = Public;
-			sourceTree = "<group>";
-		};
-		C9B29049267508E1007C31A9 /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				C9815D95267060EF0056AC3E /* ResponseHelper.swift */,
-				9118D8BF223F1B4C00195DC1 /* UserDefaultsHelper.swift */,
-			);
-			path = Helper;
-			sourceTree = "<group>";
-		};
-		C9B2904C267508EA007C31A9 /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				C9334FC7264E998D00190EB7 /* String+Regex.swift */,
-			);
-			path = Extension;
-			sourceTree = "<group>";
-		};
-		C9B2904F267508FD007C31A9 /* Mock */ = {
-			isa = PBXGroup;
-			children = (
 				C9815D9D2670635C0056AC3E /* MockRepository.swift */,
 				C9B29045267508B1007C31A9 /* MockStorage.swift */,
 				9118D8BE223F1B4C00195DC1 /* MockEntry.swift */,
+				C9815D95267060EF0056AC3E /* ResponseHelper.swift */,
+				C9DA4068267608010080813A /* FileHelper.swift */,
+				9118D8BF223F1B4C00195DC1 /* UserDefaultsHelper.swift */,
+				C9334FC7264E998D00190EB7 /* String+Regex.swift */,
 			);
-			path = Mock;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -357,6 +328,7 @@
 				C9815D96267060EF0056AC3E /* ResponseHelper.swift in Sources */,
 				9118D8C2223F1B4C00195DC1 /* MockEntry.swift in Sources */,
 				C9B28FB32671C209007C31A9 /* Constants.swift in Sources */,
+				C9DA4069267608010080813A /* FileHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

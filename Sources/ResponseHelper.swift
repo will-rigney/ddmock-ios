@@ -29,7 +29,7 @@ import Foundation
 
 // todo: maybe think about replacing this with a builder
 // todo: move this out of amorphous 'helper'
-class ResponseHelper {
+final class ResponseHelper {
 
     // todo: allow headers to be configurable
     static func getMockHeaders(contentLength: Int?) -> [String: String] {
@@ -62,23 +62,6 @@ class ResponseHelper {
             statusCode: statusCode,
             httpVersion: "HTTP/1.1",
             headerFields: headers)
-    }
-
-    // todo: this response should be configurable somehow like the header
-    // todo: hide this
-    // should know what the path is from the entry
-    static func getData(_ entry: MockEntry) -> Data? {
-
-        let file = entry.getSelectedFile()
-
-//        todo: file should just be a string of the directory (?)
-        let path = Bundle.main.resourcePath! + Constants.mockDirectory
-
-        let url = URL(fileURLWithPath: "\(path)/\(file)")
-
-        return try? Data(
-            contentsOf: url,
-            options: .mappedIfSafe)
     }
 
     ///

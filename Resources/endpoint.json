@@ -1,6 +1,11 @@
 {
     "PreferenceSpecifiers": [
         {
+            "Title": " Configuration",
+            "Type": "PSGroupSpecifier",
+            "FooterText": "Any headers below will be returned with the response. To configure these add an 'h.json' file in the mock directory."
+        },
+        {
             "Type": "PSToggleSwitchSpecifier",
             "Title": "Use real API",
             "Key": "$endpointPathKey_use_real_api",

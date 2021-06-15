@@ -2,6 +2,8 @@ import Foundation
 
 /**
  mock entry struct
+
+ this refers to the endpoint + method
  */
 struct MockEntry: Codable {
     // constants
@@ -11,11 +13,26 @@ struct MockEntry: Codable {
     // ok
     let path: String
 
+    // todo: should have more obvious structures for data
+
+//    struct FileMeta: Codable {
+//        let filename: String
+//        let headerKey: String
+//    }
+
     // todo: less mutability
-    var files: [String] = []
+    var files: [URL] = []
 
     // todo: more thread safety
     var selectedFile = 0
+
+    // ok hear me out here
+    // key is string for a file
+    // can just be the value with the path
+    // value is key / value pair of headers default value encoded in json
+    /**/
+    // this is now just headings by endpoint
+    var headers: [String: String] = [:]
 
     //
     private var statusCode = defaultStatusCode
@@ -24,7 +41,7 @@ struct MockEntry: Codable {
     var responseTime = defaultResponseTime
 
     ///
-    init(path: String, files: [String]) {
+    init(path: String, files: [URL]) {
         self.path = path
         self.files = files
     }
@@ -32,7 +49,7 @@ struct MockEntry: Codable {
     // this is the key for the selected file in the files list for an entry
     func getSelectedFile() -> String {
         let index = UserDefaultsHelper.getInteger(key: path, item: .mockFile)
-        return files[index]
+        return files[index].absoluteString
     }
 
     // get status code for an entry
@@ -55,26 +72,8 @@ struct MockEntry: Codable {
             item: .responseTime) ?? MockEntry.defaultResponseTime
     }
 
+    // nice
     func getHeaders() -> [String: String]? {
-        // get a group or an array?
-        // ok this one is funny
-        var headers: [String: String] = [:]
-        func getHeaderKey(_ i: Int) -> String {
-            let selectedFile = getSelectedFile()
-            let trimIndex = selectedFile.lastIndex(of: ".")
-            // probably a more readable way
-            let filename =  trimIndex != nil
-                ? String(selectedFile.prefix(upTo: trimIndex!))
-                : selectedFile
-            return "\(filename)\(i)"
-        }
-
-        var i = 0
-        while
-            let (title, value) = UserDefaultsHelper.getTitleValuePair(key: getHeaderKey(i)) {
-            headers[title ?? ""] = value ?? ""
-            i += 1
-        }
         return headers
     }
 
