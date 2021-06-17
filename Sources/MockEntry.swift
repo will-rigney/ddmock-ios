@@ -15,11 +15,6 @@ struct MockEntry: Codable {
 
     // todo: should have more obvious structures for data
 
-//    struct FileMeta: Codable {
-//        let filename: String
-//        let headerKey: String
-//    }
-
     // todo: less mutability
     var files: [URL] = []
 

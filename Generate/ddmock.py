@@ -1,10 +1,13 @@
 import os
 import plistlib
-import pathlib
 import logging
 import json
 import argparse
 import copy
+
+# helpers for creating new items for plists
+import filehelpers
+import itemhelpers
 
 
 # create the map of endpoints from mockfiles
@@ -23,7 +26,7 @@ def generate_map(mockfiles_path):
 
     # recursive directory traversal
     # todo: define subdir - it is the subdirectory configured (?)
-    for current, dirs, files in os.walk(mockfiles_path):
+    for current, _dirs, files in os.walk(mockfiles_path):
 
         # iterate through mockfiles, sorted alphabetically
         for file in sorted(files):
@@ -47,12 +50,9 @@ def generate_map(mockfiles_path):
                     key = key.replace("/", "", 1)
 
                 # add the trailing file path for header keys
-                key = f"{get_canonical_key(key)}.{file}"
+                key = f"{filehelpers.get_canonical_key(key)}.{file}"
 
-                # not working in xcode
-                # key.removesuffix(".h.json")
-                if key.endswith('.h.json'):
-                    key = key[:-7]  # ugly magic
+                # does this make any sense?
 
                 header_map[key] = res
                 continue
@@ -83,60 +83,6 @@ def generate_map(mockfiles_path):
     return (endpoint_map, header_map)
 
 
-# def generate_header_map():
-
-    # open a file with the name res and return it
-
-
-def load_json_resource(res):
-    logging.info(f"loading json resource: {res}")
-    with open(res, "r") as file:
-        res = json.load(file)
-    return res
-
-
-# pure function returns an object to add to root preference specifier
-def create_root_item(filename):
-    new_item = {}
-    new_item['Type'] = 'PSChildPaneSpecifier'
-    new_item['File'] = filename
-    new_item['Title'] = filename
-    return new_item
-
-
-# create an item to add to endpoint plist for the group header for headers
-def create_headers_group_item(title):
-    new_item = {}
-    new_item['Type'] = 'PSGroupSpecifier'
-    new_item['Title'] = title
-    return new_item
-
-
-# create a new item to represent a header from the key, title & value
-def create_headers_item(key, title, value):
-    new_item = {}
-    new_item['Type'] = "PSTextFieldSpecifier" # PSTitleValueSpecifier"
-    new_item['DefaultValue'] = value
-    new_item['Title'] = title
-    new_item["Key"] = key
-    return new_item
-
-
-# get resource path from canonical path of script
-def get_ddmock_path(resources_path):
-    path = os.path.dirname(os.path.realpath(__file__))
-    path = pathlib.Path(path)
-    path = path.parent.joinpath(resources_path).absolute()
-    return path
-
-
-# transforms some input (most likely a path) into a canonical key
-# relies on the input being unique to be "canonical"
-def get_canonical_key(path):
-    key = path.replace("/", ".")
-    return key
-
-
 # creates a copy of endpoint & replaces keys
 # for endpointh path and endpoint key (filename)
 def create_endpoint_plist(endpoint, endpoint_path, filename, files):
@@ -144,7 +90,7 @@ def create_endpoint_plist(endpoint, endpoint_path, filename, files):
     # copy a new endpoint object
     new_endpoint = copy.deepcopy(endpoint)
 
-    logging.info(f"new endpoint: {new_endpoint}")
+    logging.info("new endpoint: %s", new_endpoint)
 
     # replace variable keys in all the endpoint items
 
@@ -178,7 +124,7 @@ def main(mockfiles_path, output_path):
     print(f"Path to mockfiles: {mockfiles_path}")
     print(f"Output path: {output_path}")
 
-    path = get_ddmock_path("Resources")
+    path = filehelpers.get_ddmock_path("Resources")
     # print(f"Template path: {path}")
 
     # first create the map
@@ -186,8 +132,7 @@ def main(mockfiles_path, output_path):
     print("Creating map of endpoint paths and mock files...")
     (endpoint_map, header_map) = generate_map(mockfiles_path)
 
-    # todo: lazy evaluation in logging
-    logging.info(f" map: {endpoint_map}")
+    logging.info(" map: %s", endpoint_map)
 
     # start creating settings bundle
     print("Creating Settings.bundle...")
@@ -199,8 +144,8 @@ def main(mockfiles_path, output_path):
 
     # load templates
     print("Loading JSON templates...")
-    root = load_json_resource(path.joinpath("root.json"))
-    endpoint = load_json_resource(path.joinpath("endpoint.json"))
+    root = filehelpers.load_json_resource(path.joinpath("root.json"))
+    endpoint = filehelpers.load_json_resource(path.joinpath("endpoint.json"))
 
     # save each endpoint as a plist
     for endpoint_path, files in endpoint_map.items():
@@ -208,10 +153,10 @@ def main(mockfiles_path, output_path):
         print(f"Adding endpoint: {endpoint_path}")
 
         # replaces the slashes with periods for ...
-        canonical_key = get_canonical_key(endpoint_path)
+        canonical_key = filehelpers.get_canonical_key(endpoint_path)
 
         # add endpoint to root plist
-        new_item = create_root_item(canonical_key)
+        new_item = itemhelpers.create_root_item(canonical_key)
         root['PreferenceSpecifiers'].append(new_item)
 
         # create new endpoint object from endpoint template
@@ -224,8 +169,8 @@ def main(mockfiles_path, output_path):
 
         # check if there are any headers and add them if there are
         # for file in files:
-            # get the key for the file e.g. todos.get.01
-        key = get_canonical_key(f"{endpoint_path}")
+        # get the key for the file e.g. todos.get.01
+        key = filehelpers.get_canonical_key(f"{endpoint_path}")
 
         try:
             # try and get some headers
@@ -241,14 +186,14 @@ def main(mockfiles_path, output_path):
         for (title, value) in headers.items():
 
             # use a header for the parammeter title
-            group = create_headers_group_item(title)
+            group = itemhelpers.create_headers_group_item(title)
             # add the item to the list of preference specifiers
             new_endpoint['PreferenceSpecifiers'].append(group)
 
             # create the user defaults key for the header value
             value_key = f"{key}.{title}_value"
             # create a new item for the header
-            value = create_headers_item(value_key, "Value", value)
+            value = itemhelpers.create_headers_item(value_key, "Value", value)
             # add the item to the list of preference specifiers
             new_endpoint['PreferenceSpecifiers'].append(value)
 
@@ -261,7 +206,7 @@ def main(mockfiles_path, output_path):
     # create general plist from json template
     print("Load general.plist template...")
     general = path.joinpath("general.json")
-    general = load_json_resource(general)
+    general = filehelpers.load_json_resource(general)
 
     # write general plist
     print("Writing general.plist...")

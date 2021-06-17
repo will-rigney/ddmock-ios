@@ -4,10 +4,15 @@
 
 An API mocking library for iOS.
 
-[![CI Status](https://img.shields.io/travis/DeloitteDigitalAPAC/ddmock-ios.svg?style=flat)](https://travis-ci.org/DeloitteDigitalAPAC/ddmock-ios)
+[![CI Status](https://img.shields.io/travis/DeloitteDigitalAPAC/ddmock-ios.svg?style=flat)](https://travis-ci.com/DeloitteDigitalAPAC/ddmock-ios)
 [![Version](https://img.shields.io/cocoapods/v/DDMockiOS.svg?style=flat)](https://cocoapods.org/pods/DDMockiOS)
 [![License](https://img.shields.io/cocoapods/l/DDMockiOS.svg?style=flat)](https://cocoapods.org/pods/DDMockiOS)
 [![Platform](https://img.shields.io/cocoapods/p/DDMockiOS.svg?style=flat)](https://cocoapods.org/pods/DDMockiOS)
+
+## Features
+
+* Runtime configuration of mock responses.
+
 
 ## Requirements
 
@@ -23,9 +28,11 @@ pod 'DDMockiOS'
 ```
 2. Run `pod install`
 
-3. Create a new run script in the target build phase and add
+3. Create a new run script in the target build phase and add:
 
-`python "${PODS_ROOT}/DDMockiOS/init-mocks.py" "<path_to_mock_files_directory>/mockfiles"`
+```bash
+python3 "${PODS_ROOT}/Generators/ddmock.py" "<path_to_mock_files_directory>/mockfiles"
+```
 
 4. Follow Getting Started steps
 
@@ -71,6 +78,11 @@ DDMockProtocol.initialise(config: configuration)
 * All mock files need to be JSON files
 * There can be more than one mock file stored under each endpoint path
 * By default, the first file listed (alphabetically ordered) under each endpoint path is selected as the mock response
+
+### Headers
+
+* Headers can be configured for each endpoint by including a file named `h.json` in the endpoint directory.
+* Currently only string values for header entries are supported.
 
 ## License
 
